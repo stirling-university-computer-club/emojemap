@@ -46,6 +46,10 @@ public class DataManager implements Runnable {
 			return 0.0f;
 		}
 		
+		if (region > index.length || emotion > index[0].length || region < 0 || emotion < 0) {
+			return 0.0f;
+		}
+		
 		return index[region][emotion];
 		
 	}
@@ -70,6 +74,10 @@ public class DataManager implements Runnable {
 	}
 	
 	public void updateIndex(int region, int emotion, float value) {
+		
+		if (region > index.length || emotion > index[0].length || region < 0 || emotion < 0) {
+			return;
+		}
 		
 		index[region][emotion] = value;
 		

@@ -15,6 +15,12 @@ public class BlSecurity {
 		
 	}
 	
+	public String getName() {
+		
+		return this.name;
+		
+	}
+	
 	public void addField(String name, String value) {
 		
 		fields.add(new BlField(name, value));
