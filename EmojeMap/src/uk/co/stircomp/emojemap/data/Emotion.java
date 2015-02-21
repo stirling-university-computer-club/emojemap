@@ -2,10 +2,13 @@ package uk.co.stircomp.emojemap.data;
 
 public class Emotion {
 	
-	public final int	ANGRY = 0;
+	public static final int		ANGRY = 0,
+								FEAR = 1,
+								HAPPY = 2,
+								SAD = 3;
 	
 	public static final String[] EMOTIONS = {
-		"ANGRY"
+		"ANGRY", "FEAR", "HAPPY", "SAD"
 	};
 
 	public static int getEmotionIndex(String emotion) {

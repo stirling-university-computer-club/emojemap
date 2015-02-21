@@ -12,18 +12,17 @@ public class TwitterFetch {
 			String[] angryWords = {"angry", "raging", "pissed", "furious", "fuming", "outrageous", "asshole", "idiot", "stupid", "annoyed", "enraged", "irritating"};
 			String[] happyWords = {"happy", "the best", "awesome", "nice", "cheerful", "delighted", "elated", "glad", "joyful", "joyous", "nice", "pleasant"};
 			
-			SearchTwitter searchTwitter = new SearchTwitter();
 			
-			Query q = new Query();
+			//Query q = new Query();
 			
 			for (int i=0 ; i < happyWords.length ; i++){
-				SearchTwitter.query(happyWords[i]);
-				System.out.println(searchTwitter.search(q));
+				SearchTwitter.query(angryWords[i]);
+				System.out.println(SearchTwitter.search(angryWords[i]));
 			}
 			
 			for (int i=0 ; i < angryWords.length ; i++){
-				SearchTwitter.query(angryWords[i]);
-				System.out.println(searchTwitter.search(q));
+				SearchTwitter.query(happyWords[i]);
+				System.out.println(SearchTwitter.search(happyWords[i]));
 			}
 			
 			
