@@ -30,9 +30,7 @@ public class BloombergRequest {
 	public BloombergRequest(String[] tickers, String[] fields) {
 		
 		this.tickers = tickers;
-		this.fields = fields;		
-		
-		make();
+		this.fields = fields;	
 
 	}
 	
@@ -45,53 +43,44 @@ public class BloombergRequest {
 		
 		// Open
 		wr.write("{".getBytes());
-		System.out.print("{");
 		
 		// Write securities.
 		wr.write("\"securities\":[".getBytes());	
-		System.out.print("\"securities\":[");
 		for (int s = 0; s < this.tickers.length; s++) {
 			wr.write("\"".getBytes());
-			System.out.print("\"");
 			wr.write(tickers[s].getBytes());
-			System.out.print(tickers[s]);
 			if (s < tickers.length - 1) {
 				wr.write("\",".getBytes());
-				System.out.print("\",");
 			} else {
 				wr.write("\"".getBytes());
-				System.out.print("\"");
 			}
 		}		
 		wr.write("],".getBytes());
-		System.out.print("],");
 		
 		// Write fields.
 				wr.write("\"fields\":[".getBytes());	
-				System.out.print("\"");
 				for (int s = 0; s < this.fields.length; s++) {
 					wr.write("\"".getBytes());
 					wr.write(fields[s].getBytes());
 					if (s < fields.length - 1) {
 						wr.write("\",".getBytes());
-						System.out.print("\",");
 					} else {
 						wr.write("\"".getBytes());
-						System.out.print("\"");
 					}
 				}		
 				wr.write("]".getBytes());
 		
 		// Close
 		wr.write("}".getBytes());
-		System.out.print("}");
 		
 		wr.flush();
 		wr.close();
 		
 	}
 
-	private void make() {
+	public BloombergResponse make() {
+		
+		StringBuffer response = null;
 
 		try {
 			// load the client public/private key from PKCS12
@@ -141,23 +130,24 @@ public class BloombergRequest {
 			
 			// read the whatever we get back
 			int responseCode = urlConn.getResponseCode();
-			System.out.println("\nSending 'POST' request to URL : " + url);
-			System.out.println("Response Code : " + responseCode);
+			//System.out.println("\nSending 'POST' request to URL : " + url);
+			//System.out.println("Response Code : " + responseCode);
 
 			BufferedReader in = new BufferedReader(new InputStreamReader(
 					urlConn.getInputStream()));
 			String inputLine;
-			StringBuffer response = new StringBuffer();
+			response = new StringBuffer();
 
 			while ((inputLine = in.readLine()) != null) {
 				response.append(inputLine);
 			}
 			in.close();
 
-			System.out.println(response.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		return BloombergResponse.generateResponse(response.toString());
 
 	}
 
