@@ -33,6 +33,10 @@ import org.openstreetmap.gui.jmapviewer.tilesources.MapQuestOpenAerialTileSource
 import org.openstreetmap.gui.jmapviewer.tilesources.MapQuestOsmTileSource;
 import org.openstreetmap.gui.jmapviewer.tilesources.OsmTileSource;
 
+import uk.co.stircomp.emojemap.data.DataManager;
+import uk.co.stircomp.emojemap.data.Emotion;
+import uk.co.stircomp.emojemap.data.Region;
+
 /**
  * Demonstrates the usage of {@link JMapViewer}
  *
@@ -50,13 +54,18 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener  {
 
     private JLabel mperpLabelName=null;
     private JLabel mperpLabelValue = null;
+    
+    final DataManager data;
 
     /**
      * Constructs the {@code Demo}.
      */
-    public MiseryMap() {
+    public MiseryMap(final DataManager data) {
         super("Misery Mapping");
+    	this.setVisible(true);
         setSize(400, 400);
+        
+    	this.data = data;
 
         treeMap = new JMapViewerTree("Zones");
 
@@ -117,7 +126,7 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener  {
         });
         map().setTileLoader((TileLoader) tileLoaderSelector.getSelectedItem());
         panelTop.add(tileSourceSelector);
-        panelTop.add(tileLoaderSelector);
+       // panelTop.add(tileLoaderSelector);
         final JCheckBox showMapMarker = new JCheckBox("Map markers visible");
         showMapMarker.setSelected(map().getMapMarkersVisible());
         showMapMarker.addActionListener(new ActionListener() {
@@ -166,29 +175,35 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener  {
             }
         });
         
-        ArrayList<MapPolygonImpl> countryList = new ArrayList<MapPolygonImpl>();
-        MapPolygonImpl andorra = new MapPolygonImpl("Andorra", c(42.601945143, 1.44583614022), c(42.6163911862, 1.73860914671), c(42.5094360894, 1.72360906013), c(42.4462450884, 1.45152728555), c(42.601945143, 1.44583614022));
-        countryList.add(andorra);        
-        
-        MapMarkerCircle austria = new MapMarkerCircle("Austria", new Coordinate(47, 13), 1);
-        MapMarkerCircle belarus = new MapMarkerCircle("Belarus", new Coordinate(53, 28), 1);
-        MapMarkerCircle belgium = new MapMarkerCircle("Belgium", new Coordinate(50, 4), 1);
-        MapMarkerCircle bulgaria = new MapMarkerCircle("Bulgaria", new Coordinate(43, 25), 1);
-        MapMarkerCircle croatia = new MapMarkerCircle("Croatia", new Coordinate(45, 15), 1);
-        MapMarkerCircle czech = new MapMarkerCircle("Czech Republic", new Coordinate(49, 15), 1);
-        MapMarkerCircle denmark = new MapMarkerCircle("Denmark", new Coordinate(56, 10), 1);
-        MapMarkerCircle finland = new MapMarkerCircle("Finland", new Coordinate(64, 26), 1);
-        MapMarkerCircle france = new MapMarkerCircle("France", new Coordinate(46, 2), 1);
-        MapMarkerCircle germany = new MapMarkerCircle("Germany", new Coordinate(51, 9), 1);
-        MapMarkerCircle greece = new MapMarkerCircle("Greece", new Coordinate(39, 22), 1);
-        MapMarkerCircle hungary = new MapMarkerCircle("Hungary", new Coordinate(47, 20), 1);
-        MapMarkerCircle iceland = new MapMarkerCircle("Iceland", new Coordinate(65, 18), 1);
-        MapMarkerCircle ireland = new MapMarkerCircle("Ireland", new Coordinate(53, 8), 1);
-        MapMarkerCircle italy = new MapMarkerCircle("Italy", new Coordinate(42, 12), 1);
-   
-        
-        
-        MapPolygon spain = new MapPolygonImpl("Spain", c(49,1), c(45,10), c(40,5));
+        final ArrayList<MapPolygonImpl> countryList = new ArrayList<MapPolygonImpl>();
+        MapPolygonImpl turkey = new MapPolygonImpl("Turkey", c(37, 44), c(39, 44), c(41,42), c(41, 38), c(42, 33), c(41, 30), c(41, 26), c(36, 27), c(36, 35));
+        countryList.add(turkey);  
+        MapPolygonImpl ukraine = new MapPolygonImpl("Ukraine", c(47, 38), c(50, 40), c(52, 34), c(51, 30), c(52, 24), c(51, 24), c(48, 22), c(48, 28), c(46, 31));
+        countryList.add(ukraine);
+        MapPolygonImpl uk = new MapPolygonImpl("UK", c(51, 1), c(53, 2), c(56, -3), c(58, -2), c(58, -4), c(59, -3), c(59, -5), c(58, -7), c(54, -3), c(53, -4), c(50, -5));
+        countryList.add(uk);  
+        MapPolygonImpl sweden = new MapPolygonImpl("Sweden", c(56, 16), c(60, 19), c(61, 17), c(66, 24), c(69, 21), c(64, 13), c(59, 11), c(55, 13));
+        countryList.add(sweden);
+        MapPolygonImpl finland = new MapPolygonImpl("Finland", c(70, 28), c(69, 25), c(69, 21), c(66, 24), c(65, 25), c(63, 21), c(60, 23), c(62, 30), c(70, 29));
+        countryList.add(finland);
+        MapPolygonImpl france = new MapPolygonImpl("France", c(51, 2), c(48, -5), c(46, -1), c(43, -1), c(42, 3), c(44, 4), c(43, 6), c(44, 8), c(47, 6), c(49, 8));
+        countryList.add(france);
+        MapPolygonImpl germany = new MapPolygonImpl("Germany", c(54, 7), c(50, 6), c(49, 8), c(48, 8), c(49, 14), c(50, 12), c(51, 15), c(54, 13), c(55, 9));
+        countryList.add(germany);
+        MapPolygonImpl italy = new MapPolygonImpl("Italy", c(47, 13), c(47, 10), c(46, 7), c(44, 8), c(44, 9), c(39, 16), c(38, 16), c(40, 17), c(40, 18), c(45, 12));
+        countryList.add(italy);
+        MapPolygonImpl norway = new MapPolygonImpl("Norway", c(59, 11), c(58, 6), c(62, 5), c(70, 18), c(70, 31), c(69, 25), c(69, 20), c(63, 12));
+        countryList.add(norway);
+        MapPolygonImpl lithuania = new MapPolygonImpl("Lithuania" , c(56, 21), c(55, 21), c(55, 23), c(54, 23), c(54, 24), c(54, 26), c(56, 27), c(56, 25));
+        countryList.add(lithuania);
+        MapPolygonImpl holland = new MapPolygonImpl("Holland", c(51, 3), c(53, 5), c(53, 7), c(52, 6), c(51, 6));
+        countryList.add(holland);
+        MapPolygonImpl russia = new MapPolygonImpl("Russia", c(44, 40), c(60, 29), c(70, 31), c(77, 105), c(66, 190), c(49, 134), c(52, 99), c(54, 61), c(50, 47), c(45, 47));
+        countryList.add(russia);
+        MapPolygonImpl spain = new MapPolygonImpl("Spain", c(42, -9), c(44, -8), c(42, 3), c(40, -1), c(37, -2), c(36, -6), c(37, -7), c(42, -7)); 
+        countryList.add(spain);  
+        MapPolygonImpl poland = new MapPolygonImpl("Poland", c(54, 15), c(54, 23), c(50, 24), c(49, 20), c(51, 15));
+        countryList.add(poland);
         
         
         final JCheckBox showAnger = new JCheckBox("Anger Visible");
@@ -197,7 +212,9 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener  {
             	if (showAnger.isSelected())
             	{
             		for(int i = 0; i < countryList.size(); i++){
-            			countryList.get(i).setBackColor(new Color(255, 0, 0, 50));
+            			float j = data.getRegionalIndex(Region.getRegionIndex("africa"), Emotion.getEmotionIndex("anger"));
+            			System.out.println(j);
+            			countryList.get(i).setBackColor(new Color(255, 0, 0, (int)(j * 100 + 1)));
             		}
 
             		for(int i = 0; i < countryList.size(); i++){
@@ -296,16 +313,6 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener  {
         return new Coordinate(lat, lon);
     }
 
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        // java.util.Properties systemProperties = System.getProperties();
-        // systemProperties.setProperty("http.proxyHost", "localhost");
-        // systemProperties.setProperty("http.proxyPort", "8008");
-        new MiseryMap().setVisible(true);
-    }
-
     private void updateZoomParameters() {
         if (mperpLabelValue!=null)
             mperpLabelValue.setText(String.format("%s",map().getMeterPerPixel()));
@@ -320,5 +327,7 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener  {
             updateZoomParameters();
         }
     }
+    
+
 
 }
