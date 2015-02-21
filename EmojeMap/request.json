@@ -1,0 +1,9 @@
+{
+  "securities": [
+    "EULD60GR Index"
+  ],
+  "fields": [
+    "REGION_OR_COUNTRY",
+    "PX_LAST"
+  ]
+}
