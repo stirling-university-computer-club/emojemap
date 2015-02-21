@@ -2,6 +2,7 @@
 package uk.co.stircomp.emojemap.UI;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -11,6 +12,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -22,6 +24,7 @@ import javax.swing.JPanel;
 import org.openstreetmap.gui.jmapviewer.*;
 import org.openstreetmap.gui.jmapviewer.events.JMVCommandEvent;
 import org.openstreetmap.gui.jmapviewer.interfaces.JMapViewerEventListener;
+import org.openstreetmap.gui.jmapviewer.interfaces.MapMarker;
 import org.openstreetmap.gui.jmapviewer.interfaces.MapPolygon;
 import org.openstreetmap.gui.jmapviewer.interfaces.TileLoader;
 import org.openstreetmap.gui.jmapviewer.interfaces.TileSource;
@@ -163,20 +166,49 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener  {
             }
         });
         
+        ArrayList<MapPolygonImpl> countryList = new ArrayList<MapPolygonImpl>();
+        MapPolygonImpl andorra = new MapPolygonImpl("Andorra", c(42.601945143, 1.44583614022), c(42.6163911862, 1.73860914671), c(42.5094360894, 1.72360906013), c(42.4462450884, 1.45152728555), c(42.601945143, 1.44583614022));
+        countryList.add(andorra);        
         
-        MapMarkerCircle somewhereGermany = new MapMarkerCircle("Place", new Coordinate(48, 7), .5);
+        MapMarkerCircle austria = new MapMarkerCircle("Austria", new Coordinate(47, 13), 1);
+        MapMarkerCircle belarus = new MapMarkerCircle("Belarus", new Coordinate(53, 28), 1);
+        MapMarkerCircle belgium = new MapMarkerCircle("Belgium", new Coordinate(50, 4), 1);
+        MapMarkerCircle bulgaria = new MapMarkerCircle("Bulgaria", new Coordinate(43, 25), 1);
+        MapMarkerCircle croatia = new MapMarkerCircle("Croatia", new Coordinate(45, 15), 1);
+        MapMarkerCircle czech = new MapMarkerCircle("Czech Republic", new Coordinate(49, 15), 1);
+        MapMarkerCircle denmark = new MapMarkerCircle("Denmark", new Coordinate(56, 10), 1);
+        MapMarkerCircle finland = new MapMarkerCircle("Finland", new Coordinate(64, 26), 1);
+        MapMarkerCircle france = new MapMarkerCircle("France", new Coordinate(46, 2), 1);
+        MapMarkerCircle germany = new MapMarkerCircle("Germany", new Coordinate(51, 9), 1);
+        MapMarkerCircle greece = new MapMarkerCircle("Greece", new Coordinate(39, 22), 1);
+        MapMarkerCircle hungary = new MapMarkerCircle("Hungary", new Coordinate(47, 20), 1);
+        MapMarkerCircle iceland = new MapMarkerCircle("Iceland", new Coordinate(65, 18), 1);
+        MapMarkerCircle ireland = new MapMarkerCircle("Ireland", new Coordinate(53, 8), 1);
+        MapMarkerCircle italy = new MapMarkerCircle("Italy", new Coordinate(42, 12), 1);
+   
+        
+        
+        MapPolygon spain = new MapPolygonImpl("Spain", c(49,1), c(45,10), c(40,5));
+        
         
         final JCheckBox showAnger = new JCheckBox("Anger Visible");
         showAnger.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	if (showAnger.isSelected())
             	{
-            		
-            		map().addMapMarker(somewhereGermany);
+            		for(int i = 0; i < countryList.size(); i++){
+            			countryList.get(i).setBackColor(new Color(255, 0, 0, 50));
+            		}
+
+            		for(int i = 0; i < countryList.size(); i++){
+            			map().addMapPolygon(countryList.get(i));
+            		}
             	}
             	else
             	{
-            		map().removeMapMarker(somewhereGermany);
+            		for(int i = 0; i < countryList.size(); i++){
+            			map().removeMapPolygon(countryList.get(i));
+            		}
             	}
             }
         });
