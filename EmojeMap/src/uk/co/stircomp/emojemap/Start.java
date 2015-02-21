@@ -1,7 +1,6 @@
 package uk.co.stircomp.emojemap;
 
-import java.net.URISyntaxException;
-import uk.co.stircomp.emojemap.data.BloombergRequest;
+import uk.co.stircomp.emojemap.data.DataManager;
 import uk.co.stircomp.emojemap.UI.WorldUI;
 
 public class Start {
@@ -10,6 +9,13 @@ public class Start {
 		
 		System.out.println("-- A map of world emotions --");
 		WorldUI worldUI = new WorldUI();
+		
+		// Create the Data Manager
+		DataManager data = new DataManager();
+		Thread t = new Thread(data);
+		t.start();
+		
+		// Data can now be accessed from data.
 		
 	}
 
