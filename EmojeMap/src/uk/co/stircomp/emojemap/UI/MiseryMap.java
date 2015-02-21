@@ -172,11 +172,11 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener  {
             	if (showAnger.isSelected())
             	{
             		
-            		map().addMapMarker(somewhereGermany);
+            		//map().addMapMarker(somewhereGermany);
             	}
             	else
             	{
-            		map().removeMapMarker(somewhereGermany);
+            		//map().removeMapMarker(somewhereGermany);
             	}
             }
         });
