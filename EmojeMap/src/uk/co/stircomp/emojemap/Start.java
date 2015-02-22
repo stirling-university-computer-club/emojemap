@@ -17,10 +17,13 @@ public class Start {
 		Thread t = new Thread(data);
 		t.start();		
 		// Data can now be accessed from data.		
-		new MiseryMap(data).setVisible(true);
-				
+		new MiseryMap(data).setVisible(true);				
 		
 		data.getRegionalIndex(Region.getRegionIndex("africa"), Emotion.getEmotionIndex("anger"));
+		
+		// // Sound
+		Sound s = new Sound("data/music.wav");
+		s.start();
 		
 	}
 	
