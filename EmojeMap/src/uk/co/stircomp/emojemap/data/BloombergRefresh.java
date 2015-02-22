@@ -198,11 +198,13 @@ public class BloombergRefresh {
 			if (region == null) continue;
 			
 			double rate = 1- (Double.parseDouble(s.getFieldValue("PX_LAST")) / 50);
-			if (rate > 1.0f) rate *= 0.1;
+			if (rate < 0.0f) rate *= (-1);
+			if (rate < 1.0f) rate += 1;
+			
 
 			System.out.println(region + " HP " + rate);
 			
-			dm.modifyIndex(Region.getRegionIndex(region), Emotion.HAPPY, 1.0f + (1.0f - (float)rate));
+			dm.modifyIndex(Region.getRegionIndex(region), Emotion.HAPPY, (float)rate);
 			dm.modifyIndex(Region.getRegionIndex(region), Emotion.SAD, 1.0f + (float)rate);
 			dm.modifyIndex(Region.getRegionIndex(region), Emotion.ANGRY, 1.0f + (float)rate);
 			//dm.modifyIndex(Region.getRegionIndex(region), Emotion.FEAR, (float) rate);

@@ -39,25 +39,31 @@ public class DataManager extends Observable implements Runnable {
 		setMessage("Starting data.");
 		
 		setMessage("Initialising indexes to zero");
-		initialiseIndexes();
+		initialiseIndexes();		
 		
 		setMessage("Initialising location resolver");
 		resolver = new GeolocationResolver();
 		
-		setMessage("Fetching Twitter.");
-		 new TwitterFetch(this);	
-			setMessage("Refreshing Bloomberg data");
-			try {
-				new BloombergRefresh(this);
-			} catch (Exception e) { e.printStackTrace(); }
+		setMessage("Refreshing Bloomberg data");
+		try {
+			new BloombergRefresh(this);
+		} catch (Exception e) { e.printStackTrace(); }
+		
+		// Fetch the twitter data on a schedule.
+		while (true) {
+		
+			setMessage("Fetching Twitter.");
+			new TwitterFetch(this);	
+			
 			setMessage("Fetched.");
 			try {
-				Thread.sleep(3000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-						
+				Thread.sleep(30000);
+			} catch (InterruptedException e) { e.printStackTrace(); }		
+			
 			window.setVisible(false);
+		
+		}
+			
 		
 	}
 	
@@ -91,6 +97,10 @@ public class DataManager extends Observable implements Runnable {
 			}
 		}
 		
+		index[Region.SWITZERLAND][Emotion.ANGRY] = 0.0f;
+		index[Region.SWITZERLAND][Emotion.FEAR] = 0.0f;
+		index[Region.SWITZERLAND][Emotion.HAPPY] = 0.0f;
+		index[Region.SWITZERLAND][Emotion.SAD] = 0.0f;
 		initialised = true;
 		
 	}
@@ -105,6 +115,7 @@ public class DataManager extends Observable implements Runnable {
 		normaliseIndex(region, emotion);
 		
 		// Notify
+		setChanged();
 		notifyObservers(new DataPointUpdate(region, emotion));
 		
 	}
@@ -123,14 +134,21 @@ public class DataManager extends Observable implements Runnable {
 		normaliseIndex(region, emotion);
 		
 		// Notify
+		setChanged();
 		notifyObservers(new DataPointUpdate(region, emotion));
 		
 	}
 	
 	private void normaliseIndex(int region, int emotion) {
 		
-		if (index[region][emotion] > 1.0f) index[region][emotion] = 1.0f;
-		if (index[region][emotion] < 0.0f) index[region][emotion] = 0.0f;
+		if (index[region][emotion] > 1.0f) {
+			index[region][emotion] = 1.0f;
+			System.err.println(Region.REGIONS[region] + " required top normal.");
+		}
+		if (index[region][emotion] < 0.0f) {
+			index[region][emotion] = 0.0f;
+			System.err.println(Region.REGIONS[region] + " required bottom normal.");
+		}
 		
 	}
 
