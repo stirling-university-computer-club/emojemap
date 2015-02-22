@@ -209,11 +209,21 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener  {
         MapPolygonImpl germany = new MapPolygonImpl("Germany", c(54.83,9.445), c(54.76,9.972), c(54.56,10.03), c(54.46,9.866), c(54.38,10.98), c(54.21,11.09), c(54.06,10.76), c(53.89,10.82), c(54.01,11.09), c(53.92,11.41), c(54.47,12.53), c(54.43,12.92), c(54.40,12.46), c(54.26,12.37), c(54.40,13.02), c(54.10,13.45), c(54.17,13.71), c(53.85,13.81), c(53.70,14.28), c(53.14,14.39), c(52.86,14.15), c(52.57,14.64), c(52.40,14.53), c(52.07,14.76), c(51.82,14.60), c(51.29,15.03), c(50.87,14.83), c(51.05,14.31), c(50.88,14.31), c(50.42,12.99), c(50.39,12.52), c(50.21,12.32), c(50.32,12.09), c(49.91,12.55), c(49.70,12.46), c(49.42,12.67), c(48.77,13.83), c(48.52,13.73), c(48.56,13.44), c(48.37,13.40), c(48.12,12.76), c(47.85,13.01), c(47.72,12.91), c(47.64,13.10), c(47.47,13.01), c(47.68,12.74), c(47.40,11.10), c(47.59,10.48), c(47.27,10.17), c(47.37,10.23), c(47.54,9.955), c(47.54,9.567), c(47.81,8.563), c(47.70,8.407), c(47.59,8.576), c(47.58,7.588), c(48.12,7.578), c(48.58,7.802), c(48.96,8.226), c(49.18,7.426), c(49.17,6.729), c(49.46,6.362), c(49.81,6.524), c(49.90,6.234), c(50.13,6.134), c(50.32,6.398), c(50.62,6.270), c(50.76,6.012), c(50.91,6.081), c(51.05,5.865), c(51.13,6.097), c(51.47,6.222), c(51.81,5.964), c(51.98,6.829), c(52.08,6.736), c(52.24,7.053), c(52.39,7.063), c(52.55,6.690), c(52.65,7.053), c(53.24,7.208), c(53.32,7.337), c(53.41,7.015), c(53.69,7.296), c(53.71,8.014), c(53.44,8.098), c(53.42,8.286), c(53.62,8.332), c(53.56,8.492), c(53.69,8.484), c(53.89,8.659), c(53.87,9.096), c(53.86,9.283), c(53.54,9.829), c(53.88,9.276), c(53.96,8.883), c(54.08,9.017), c(54.15,8.827), c(54.29,8.884), c(54.33,8.600), c(54.50,9.011), c(54.87,8.546), c(54.77,8.281), c(55.06,8.408), c(54.92,8.420), c(54.91,8.665), c(54.83,9.445));
         countryList.add(germany);
         
-        final JCheckBox showAnger = new JCheckBox("Anger Visible");
-        showAnger.addActionListener(new ActionListener() {
+        String[] emotionList = new String[]{"Blank", "Display Anger", "Display Sadness"};
+        final JComboBox showEmotions = new JComboBox(emotionList);
+        showEmotions.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	if (showAnger.isSelected())
-            	{
+               	if (showEmotions.getSelectedItem().equals("Blank"))
+            	{	
+            		for(int i = 0; i < countryList.size(); i++){
+            			map().removeMapPolygon(countryList.get(i));
+            		}
+            	}
+            	if (showEmotions.getSelectedItem().equals("Display Anger"))
+            	{	
+            		for(int i = 0; i < countryList.size(); i++){
+            			map().removeMapPolygon(countryList.get(i));
+            		}
             		for(int i = 0; i < countryList.size(); i++){
             			float j = data.getRegionalIndex(Region.getRegionIndex(countryList.get(i).getName()), Emotion.ANGRY);
             			System.out.println(j);
@@ -224,21 +234,11 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener  {
             			map().addMapPolygon(countryList.get(i));
             		}
             	}
-            	else
+            	if (showEmotions.getSelectedItem().equals("Display Sadness"))
             	{
             		for(int i = 0; i < countryList.size(); i++){
             			map().removeMapPolygon(countryList.get(i));
             		}
-            	}
-            }
-        });
-        panelBottom.add(showAnger);
-        
-        final JCheckBox showSad = new JCheckBox("Sad Visible");
-        showSad.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-            	if (showSad.isSelected())
-            	{
             		for(int i = 0; i < countryList.size(); i++){
             			float j = data.getRegionalIndex(Region.getRegionIndex(countryList.get(i).getName()), Emotion.SAD);
             			System.out.println(j);
@@ -249,15 +249,9 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener  {
             			map().addMapPolygon(countryList.get(i));
             		}
             	}
-            	else
-            	{
-            		for(int i = 0; i < countryList.size(); i++){
-            			map().removeMapPolygon(countryList.get(i));
-            		}
-            	}
             }
         });
-        panelBottom.add(showSad);
+        panelBottom.add(showEmotions);
         
         //LayerGroup germanyGroup = new LayerGroup("Germany");
     	//Layer germanyWestLayer = germanyGroup.addLayer("Germany West");
