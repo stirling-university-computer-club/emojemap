@@ -182,6 +182,7 @@ public class TwitterFetch {
 		// Andorra
 		locs[134] = new GeoLocation(42.543404, 1.567198);		
 		
+		
 		for (int l = 0; l < locs.length; l++) {
 			
 			processRequest(dm, "", locs[l]);
