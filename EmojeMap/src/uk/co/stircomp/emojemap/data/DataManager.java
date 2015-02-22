@@ -1,6 +1,8 @@
 package uk.co.stircomp.emojemap.data;
 
-public class DataManager implements Runnable {
+import java.util.Observable;
+
+public class DataManager extends Observable implements Runnable {
 	
 	private String message;
 	private float[][] index;
@@ -102,6 +104,9 @@ public class DataManager implements Runnable {
 		index[region][emotion] = value;
 		normaliseIndex(region, emotion);
 		
+		// Notify
+		notifyObservers(new DataPointUpdate(region, emotion));
+		
 	}
 	
 	public void modifyIndex(int region, int emotion, float value) {
@@ -116,6 +121,9 @@ public class DataManager implements Runnable {
 		
 		index[region][emotion] *= value;
 		normaliseIndex(region, emotion);
+		
+		// Notify
+		notifyObservers(new DataPointUpdate(region, emotion));
 		
 	}
 	
