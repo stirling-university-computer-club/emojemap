@@ -8,11 +8,135 @@ import twitter4j.TwitterException;
 import uk.co.stircomp.emojemap.SearchTwitter;
 
 public class TwitterFetch {
+	private final String[] dictAngry = {"angry", "pissed",
+			"annoyed", "irritated", "fuck", "shit", "asshole",
+			"bastard", "wütend", "besoffen", "verärgert",
+			"gereizt", "scheiße", "arschloch", "bastard",
+			"ядосан", "пиян-залян", "раздразнен", "раздразнена",
+			"дяволите", "лайна", "задник", "копеле", "en colère",
+			"bourré", "agacé", "irrité", "merde", "connard",
+			"θυμωμένος", "νευριάσει", "ενοχλημένος", "ερεθισμένο",
+			"γαμώ", "σκατά", "μαλάκα", "μπάσταρδος", "naštvaný",
+			"podrážděný", "souložit", "hovno", "kretén",
+			"rozzlobený", "vred", "irriteret", "fanden", "lort",
+			"røvhul", "skiderik", "vihane", "pahane", "ärritunud",
+			"pask", "sitapea", "värdjas", "suuttunut", "kännissä",
+			"harmissaan", "ärtynyt", "naida", "paska", "kusipää",
+			"dühös", "részeg", "bosszús", "irritált", "fasz",
+			"szar", "seggfej", "fattyú", "feargach", "ag fuck",
+			"cac", "bastaird", "arrabbiato", "sbronzo",
+			"infastidito", "irritato", "fanculo", "merda",
+			"stronzo", "bastardo", "dusmīgs", "sapīcis", 
+			"iekaisušas", "jāšanās", "sūdi", "bastards", "piktas",
+			"įsiutęs", "pasipiktinę", "suirzęs", "pyktis",
+			"šūdas", "šikna", "šunsnukis", "blet", "naxuj", "nx",
+			"kurva", "zertva", "zertwa", "kekse", "pyderastas",
+			"pydaras", "pyderas", "gaidys", "boos", "dronken",
+			"geërgerd", "geïrriteerde", "neuken", "stront", "lul",
+			"bastaard", "zangado", "bêbado", "aborrecido",
+			"irritada", "porra", "merda", "idiota", "desgraçado",
+			"rrabjata", "imdejqa", "irritata", "bagħal", 
+			"nahnevaný", "naštvaný", "podráždený", "súložiť",
+			"hovno", "kretén", "jezen", "motenih", "razdraženo",
+			"vraga", "sranje", "kreten", "arg", "skit", "rövhål",
+			"jävel", "ljut", "uzbuđen", "razdražen", "jebati",
+			"sranje", "šupak", "kopile", "sint", "forbanna",
+			"irritert", "faen", "dritt", "drittsekk"};
 	
-	private final String[] dictAngry = {"angry", "pissed", "annoyed", "irritated", "fuck", "shit", "asshole", "bastard"};
-	private final String[] dictHappy = {"happy", "cheerful", "amazing", "awesome", "smile", "smiling", "pleased", "thank", "yay", "good"};
-	private final String[] dictSad = {"poor", "hurt", "sad", "unhappy", "unfair", "broke", "hospital", "death", "cry", "cried"};
-
+	private final String[] dictHappy = {"happy", "great", "cheerful",
+			"amazing", "awesome", "smile", "smiling", "pleased",
+			"thank", "yay", "good", "glücklich", "fröhlich",
+			"erstaunlich", "ehrfürchtige", "Lächeln", "lächelnd",
+			"zufrieden", "danken", "gut", "щастлив",
+			"радостен", "удивителен", "страхотен", "усмивка",
+			"усмихнати", "доволен", "благодаря", "добър",
+			"heureux", "gai", "incroyable", "impressionnant",
+			"sourire", "souriant", "heureux", "merci",
+			"bon", "ευτυχισμένος", "χαρούμενος", "καταπληκτικός",
+			"φοβερός", "χαμόγελο", "χαμογελαστά",
+			"ευχαριστημένος", "ευχαριστώ", "καλός",
+			"šťastný", "veselý", "úžasný", "děsivý", "úsměv",
+			"úsměvem", "potěšený", "poděkovat", "dobrý",
+			"munter", "fantastisk", "smil", "smilende", "glad",
+			"takgod", "õnnelik", "rõõmus", "hämmastav",
+			"aukartust äratav", "naeratus", "naerune", "rahul",
+			"tänama", "jess", "hea", "onnellinen", "iloinen",
+			"hämmästyttävä", "mahtava", "hymy", "hymyilevä",
+			"tyytyväinen", "kiittää", "hyvä", "boldog", "vidám",
+			"elképesztő", "döbbenetes", "mosoly", "mosolyogva",
+			"elégedett", "köszönet", "jó", "sásta", "iontach",
+			"uamhnach", "aoibh gháire", "miongháire", "sásta",
+			"go raibh maith", "maith", "felice", "allegro",
+			"sorprendente", "imponente", "sorriso", "sorridente",
+			"contento", "grazie", "buono", "laimīgs", "jautrs",
+			"pārsteidzošs", "laba", "smaids", "smiling", 
+			"priecīgs", "pateikties", "labs", "laimingas", 
+			"linksmas",	"nuostabus", "puikus", "šypsena", 
+			"šypsosi", "patenkintas", "dėkoju",	"geras", "aciu",
+			"gelukkig", "vrolijk", "verbazingwekkend",
+			"ontzagwekkend", "glimlach", "glimlachen", "tevreden",
+			"bedanken", "goed", "feliz", "alegre", "surpreendente",
+			"impressionante", "sorriso", "sorridente", 
+			"satisfeito", "obrigado", "bom", "kuntenti", 
+			"ferrieħa", "aqwa", "biża", "daħka", "jitbissem",
+			"kuntent", "nirringrazzja", "tajba", "šťastný",
+			"veselý", "úžasný", "desivý", "úsmev", "úsmevom",
+			"potešený", "poďakovať", "dobrý", "srečna", "veselo",
+			"neverjetno", "super", "nasmeh", "nasmejan",
+			"zadovoljen", "hvala", "dobra", "lycklig", 
+			"fantastiskt", "häftigt", "le", "ler", "tack", "bra",
+			"sretan", "veseo", "nevjerojatan", "strašan",
+			"osmijeh", "nasmijan", "zadovoljan", "hvala", 
+			"dobro", "lykkelig", "munter", "kjempebra", "smil",
+			"smilende", "fornøyd", "takke", "god"};
+	
+	private final String[] dictSad = {"poor", "hurt", "sad",
+			"unhappy", "unfair", "broke", "hospital", "death",
+			"cry", "cried", "schlecht", "sich", "verletzen",
+			"traurig", "unglücklich", "unfair", "pleite",
+			"Krankenhaus", "Tod", "Schrei", "rief", "беден",
+			"боли", "тъжен", "нещастен", "несправедлив", "проби",
+			"болница", "смърт", "вик", "викаха", "pauvres",
+			"blesser", "triste", "malheureux", "injuste", "cassé",
+			"hôpital", "mort", "pleurer", "se écria", "φτωχός",
+			"βλάβη", "λυπημένος", "δυστυχής", "άδικος", "έσπασε",
+			"νοσοκομείο", "θάνατος", "κραυγή", "φώναξε", "špatný",
+			"bolet", "smutný", "nešťastný", "nespravedlivý",
+			"zlomil", "nemocnice", "smrt", "výkřik", "vykřikl",
+			"fattige", "ondt", "trist", "ulykkelig", "brød",
+			"død", "råb", "råbte", "vaene", "valu", "kurb", 
+			"õnnetu", "ebaõiglane", "pankrotis", "haigla", "surm",
+			"nutma", "hüüdis", "huono", "satuttaa", "surullinen",
+			"onneton", "epäoikeudenmukainen", "hajosi", 
+			"sairaala", "kuolema", "itkeä", "huusi", "szegény",
+			"fáj", "szomorú", "boldogtalan", "tisztességtelen",
+			"tört", "kórház", "halál", "kiáltás", "kiáltotta", "bocht",
+			"Gortaítear", "brónach", "míshásta", "éagórach",
+			"bhris", "ospidéal", "bás", "caoin", "povero", "male",
+			"triste", "infelice", "ingiusto", "rotto", "ospedale",
+			"morte", "grido", "gridò", "slikts", "ievainots",
+			"skumjš", "nelaimīgs", "negodīgs", "izputējis",
+			"slimnīca", "nāve", "sauciens", "iesaucās", "prastas",
+			"sužeistas", "liūdnas", "nelaimingas", "nesąžiningas",
+			"sumušė", "ligoninė", "mirtis", "rekia", "šaukė",
+			"pijn doen", "verdrietig", "ongelukkig", "oneerlijk",
+			"brak", "ziekenhuis", "dood", "schreeuw", "riep",
+			"pobre", "machucar", "triste", "infeliz", "injusto",
+			"quebrado", "morte", "grito", "chorou", "foqra",
+			"iweġġgħu", "diqa", "ināusta", "kissru", "isptar",
+			"mewt", "zlý", "bolieť", "smutný", "nešťastný", 
+			"nespravodlivý", "zlomil", "nemocnice", "smrť",
+			"výkrik", "vykríkol", "slaba", "boli", "žalostno",
+			"nesrečen", "nepošteno", "zlomil", "bolnišnica",
+			"smrt", "jok", "je vzkliknil", "dålig", "ont", 
+			"sorgligt", "olycklig", "orättvist", "bröt", 
+			"sjukhus", "död", "rop", "grät", "siromašan",
+			"ozlijeđen", "tužan", "nezadovoljan", "nepravedan",
+			"razbio", "bolnica", "smrt", "vapaj", "plakala",
+			"dårlig", "vondt", "trist", "ulykkelig",
+			"urettferdig", "blakk", "sykehus", "død", "gråte",
+			"gråt"};
+	
 	public TwitterFetch(DataManager dm) {
 		
 		GeoLocation[] locs = new GeoLocation[31];
@@ -97,10 +221,9 @@ public class TwitterFetch {
 			while (iter.hasNext()) {
 				Status status = iter.next();
 				
-				System.out.println("<<" + status.getText() + ">>");
-				
 				// Get the location and add to the map.
 				if (status.getGeoLocation() != null) {
+					//System.out.println("<<" + status.getText() + ">>");
 					String city = dm.getGeoResolver().findCountry(
 							status.getGeoLocation().getLatitude(),
 							status.getGeoLocation().getLongitude());					
@@ -110,9 +233,9 @@ public class TwitterFetch {
 					int sad = captureOccurrences(status.getText(), Emotion.SAD);
 					
 					// Since we are happy then let's improve regional happiness and decrease sadness
-					dm.modifyIndex(Region.getRegionIndex(city), Emotion.HAPPY, happiness / 100);
-					dm.modifyIndex(Region.getRegionIndex(city), Emotion.ANGRY, anger / 100);
-					dm.modifyIndex(Region.getRegionIndex(city), Emotion.SAD, sad / 100);
+					dm.modifyIndex(Region.getRegionIndex(city), Emotion.HAPPY, 1.0f + ((float)happiness / 100));
+					dm.modifyIndex(Region.getRegionIndex(city), Emotion.ANGRY, 1.0f - ((float)happiness / 100));
+					dm.modifyIndex(Region.getRegionIndex(city), Emotion.SAD, 1.0f - ((float)happiness / 100));
 					
 				}
 
@@ -165,12 +288,15 @@ public class TwitterFetch {
 		
 		for (int i = 0; i < dictionary.length; i++) {
 			
-			if (message.matches(dictionary[i]))
+			if (message.contains(dictionary[i])) {
 				result++;
+			}
 			
 		}
 		
-		if (result > 100) result = 100;
+		//result *= 10;
+		
+		if (result > 100) result = 99;
 		
 		return result;
 		

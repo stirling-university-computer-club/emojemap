@@ -300,7 +300,7 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener, Action
         
 
         
-        emotionList = new String[]{"Display Happiness", "Blank", "Display Anger", "Display Sadness", "Diaplay Fear", "Display Happiness"};
+        emotionList = new String[]{"Display Happiness", "Blank", "Display Anger", "Display Sadness", "Display Fear", "Display Happiness"};
         showEmotions = new JComboBox(emotionList);
         showEmotions.addActionListener(this);  
         panelBottom.add(showEmotions);

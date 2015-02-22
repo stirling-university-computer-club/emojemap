@@ -20,8 +20,8 @@ public class Start {
 		// Data can now be accessed from data.		
 		new MiseryMap(data).setVisible(true);		
 		
-		Insider debugView = new Insider(data);
-		data.addObserver(debugView);
+		//Insider debugView = new Insider(data);
+		//data.addObserver(debugView);
 		
 		data.getRegionalIndex(Region.getRegionIndex("africa"), Emotion.getEmotionIndex("anger"));
 		

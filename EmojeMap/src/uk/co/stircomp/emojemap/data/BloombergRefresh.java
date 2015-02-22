@@ -63,19 +63,19 @@ public class BloombergRefresh {
 			double debt = Double.parseDouble(s.getFieldValue("PX_LAST"));
 			
 			if (debt >= 1500000.0) {	
-				
 						
-				dm.modifyIndex(Region.getRegionIndex(region), Emotion.SAD, 1.5f);
-				dm.modifyIndex(Region.getRegionIndex(region), Emotion.FEAR, 1.6f);
-				dm.modifyIndex(Region.getRegionIndex(region), Emotion.HAPPY, 0.6f);
+				dm.addIndex(Region.getRegionIndex(region), Emotion.SAD, 0.4f);
+				dm.addIndex(Region.getRegionIndex(region), Emotion.ANGRY, 0.5f);
+				dm.addIndex(Region.getRegionIndex(region), Emotion.HAPPY, -0.4f);
+				
 			} else if (debt >= 100000.0 && debt < 1500000.0) {
-				dm.modifyIndex(Region.getRegionIndex(region), Emotion.SAD, 1.1f);
-				dm.modifyIndex(Region.getRegionIndex(region), Emotion.FEAR, 1.2f);
-				dm.modifyIndex(Region.getRegionIndex(region), Emotion.HAPPY, 0.8f);
+				dm.addIndex(Region.getRegionIndex(region), Emotion.SAD, 0.2f);
+				dm.addIndex(Region.getRegionIndex(region), Emotion.ANGRY, 0.3f);
+				dm.addIndex(Region.getRegionIndex(region), Emotion.HAPPY, -0.2f);
 			} else {
-				dm.modifyIndex(Region.getRegionIndex(region), Emotion.SAD, 0.8f);
-				dm.modifyIndex(Region.getRegionIndex(region), Emotion.FEAR, 0.8f);
-				dm.modifyIndex(Region.getRegionIndex(region), Emotion.HAPPY, 1.2f);
+				dm.addIndex(Region.getRegionIndex(region), Emotion.SAD, -0.2f);
+				dm.addIndex(Region.getRegionIndex(region), Emotion.ANGRY, -0.3f);
+				dm.addIndex(Region.getRegionIndex(region), Emotion.HAPPY, 0.4f);
 			}
 			
 		}
@@ -134,14 +134,13 @@ public class BloombergRefresh {
 			
 			if (region == null) continue;
 			
-			double rate = 1- (Double.parseDouble(s.getFieldValue("PX_LAST")) / 50);
+			double rate = Double.parseDouble(s.getFieldValue("PX_LAST")) / 500;
 			
 			System.out.println(region + " UNEMP " + rate);
 			
-			dm.modifyIndex(Region.getRegionIndex(region), Emotion.HAPPY, 1.0f + (float)rate);
-			dm.modifyIndex(Region.getRegionIndex(region), Emotion.SAD, (float) rate);
-			dm.modifyIndex(Region.getRegionIndex(region), Emotion.ANGRY, (float) rate);
-			dm.modifyIndex(Region.getRegionIndex(region), Emotion.FEAR, (float) rate);
+			dm.addIndex(Region.getRegionIndex(region), Emotion.HAPPY, (float)rate);
+			dm.addIndex(Region.getRegionIndex(region), Emotion.SAD, (float) rate);
+			dm.addIndex(Region.getRegionIndex(region), Emotion.ANGRY, (float) rate);
 			
 		}
 		
@@ -205,8 +204,8 @@ public class BloombergRefresh {
 			System.out.println(region + " HP " + rate);
 			
 			dm.modifyIndex(Region.getRegionIndex(region), Emotion.HAPPY, (float)rate);
-			dm.modifyIndex(Region.getRegionIndex(region), Emotion.SAD, 1.0f + (float)rate);
-			dm.modifyIndex(Region.getRegionIndex(region), Emotion.ANGRY, 1.0f + (float)rate);
+			dm.modifyIndex(Region.getRegionIndex(region), Emotion.SAD, 2 * (float)rate);
+			dm.modifyIndex(Region.getRegionIndex(region), Emotion.ANGRY, 2 * (float)rate);
 			//dm.modifyIndex(Region.getRegionIndex(region), Emotion.FEAR, (float) rate);
 			
 		}

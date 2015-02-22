@@ -57,46 +57,25 @@ public class DataManager extends Observable implements Runnable {
 			
 		}
 		
-		setMessage("Refreshing Bloomberg data");
-		try {
-			new BloombergRefresh(this);
-		} catch (Exception e) { e.printStackTrace(); }
-		
-		/*
-		
-		setMessage("Configuring Twitter Stream.");
-		
-		StatusListener listener = new TwitterStreamProcessor(this);
-	    TwitterStream twitterStream = new TwitterStreamFactory().getInstance();
-	    twitterStream.addListener(listener);
-	    // sample() method internally creates a thread which manipulates TwitterStream and calls these adequate listener methods continuously.
-	    twitterStream.sample();
-		
-	    setMessage("Listening to Twitter.");
-	    try {
-			Thread.sleep(3000);
-		} catch (InterruptedException e) { e.printStackTrace(); }	
-		window.setVisible(false);
-		
-		*/
-		
-		// Fetch the twitter data on a schedule.
-		
 		while (true) {
+			
+			setMessage("Refreshing Bloomberg data");
+			try {
+				new BloombergRefresh(this);
+			} catch (Exception e) { e.printStackTrace(); }
+			
+			try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) { e.printStackTrace(); }		
 		
 			setMessage("Fetching Twitter.");
-			new TwitterFetch(this);	
-			
-			setMessage("Fetched.");
-			try {
-				Thread.sleep(25000);
-			} catch (InterruptedException e) { e.printStackTrace(); }		
+			TwitterFetch tfetch = new TwitterFetch(this);				
 			
 			window.setVisible(false);
 			
 			try {
-				new BloombergRefresh(this);
-			} catch (Exception e) { e.printStackTrace(); }
+				Thread.sleep(5000);
+			} catch (InterruptedException e) { e.printStackTrace(); }	
 		
 		}
 			
@@ -128,7 +107,7 @@ public class DataManager extends Observable implements Runnable {
 		for (int x = 0; x < regionCount; x++) {
 			for (int y = 0; y < emotionCount; y++) {
 				
-				index[x][y] = 0.5f;
+				index[x][y] = 0.0f;
 				
 			}
 		}
@@ -148,6 +127,21 @@ public class DataManager extends Observable implements Runnable {
 		}
 		
 		index[region][emotion] = value;
+		normaliseIndex(region, emotion);
+		
+		// Notify
+		setChanged();
+		notifyObservers(new DataPointUpdate(region, emotion));
+		
+	}
+	
+		public void addIndex(int region, int emotion, float value) {
+		
+		if (region > index.length || emotion > index[0].length || region < 0 || emotion < 0) {
+			return;
+		}
+		
+		index[region][emotion] += value;
 		normaliseIndex(region, emotion);
 		
 		// Notify
