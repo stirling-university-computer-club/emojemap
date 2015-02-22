@@ -8,6 +8,7 @@ import twitter4j.TwitterStreamFactory;
 
 public class DataManager extends Observable implements Runnable {
 	
+	public static boolean emulate = true;
 	private String message;
 	private float[][] index;
 	private boolean initialised = false;
@@ -47,6 +48,14 @@ public class DataManager extends Observable implements Runnable {
 		
 		setMessage("Initialising location resolver");
 		resolver = new GeolocationResolver();
+		
+		// use the simulator
+		if (this.emulate) {
+			
+			Thread sim = new Thread(new RandomChanges(this));
+			sim.start();
+			
+		}
 		
 		setMessage("Refreshing Bloomberg data");
 		try {

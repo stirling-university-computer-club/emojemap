@@ -200,7 +200,7 @@ public class BloombergRefresh {
 			double rate = 1- (Double.parseDouble(s.getFieldValue("PX_LAST")) / 50);
 			if (rate < 0.0f) rate *= (-1);
 			if (rate < 1.0f) rate += 1;
-			
+			rate = rate * 0.5f;
 
 			System.out.println(region + " HP " + rate);
 			
