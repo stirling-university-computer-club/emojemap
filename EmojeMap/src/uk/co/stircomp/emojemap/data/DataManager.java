@@ -2,6 +2,10 @@ package uk.co.stircomp.emojemap.data;
 
 import java.util.Observable;
 
+import twitter4j.StatusListener;
+import twitter4j.TwitterStream;
+import twitter4j.TwitterStreamFactory;
+
 public class DataManager extends Observable implements Runnable {
 	
 	private String message;
@@ -49,7 +53,26 @@ public class DataManager extends Observable implements Runnable {
 			new BloombergRefresh(this);
 		} catch (Exception e) { e.printStackTrace(); }
 		
+		/*
+		
+		setMessage("Configuring Twitter Stream.");
+		
+		StatusListener listener = new TwitterStreamProcessor(this);
+	    TwitterStream twitterStream = new TwitterStreamFactory().getInstance();
+	    twitterStream.addListener(listener);
+	    // sample() method internally creates a thread which manipulates TwitterStream and calls these adequate listener methods continuously.
+	    twitterStream.sample();
+		
+	    setMessage("Listening to Twitter.");
+	    try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) { e.printStackTrace(); }	
+		window.setVisible(false);
+		
+		*/
+		
 		// Fetch the twitter data on a schedule.
+		
 		while (true) {
 		
 			setMessage("Fetching Twitter.");
@@ -57,10 +80,14 @@ public class DataManager extends Observable implements Runnable {
 			
 			setMessage("Fetched.");
 			try {
-				Thread.sleep(30000);
+				Thread.sleep(25000);
 			} catch (InterruptedException e) { e.printStackTrace(); }		
 			
 			window.setVisible(false);
+			
+			try {
+				new BloombergRefresh(this);
+			} catch (Exception e) { e.printStackTrace(); }
 		
 		}
 			
@@ -130,7 +157,11 @@ public class DataManager extends Observable implements Runnable {
 			return;
 		}
 		
-		index[region][emotion] *= value;
+		if (index[region][emotion] == 0.0f) {
+			index[region][emotion] += value;
+		} else {
+			index[region][emotion] *= value;
+		}		
 		normaliseIndex(region, emotion);
 		
 		// Notify

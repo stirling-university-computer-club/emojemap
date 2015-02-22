@@ -36,6 +36,8 @@ public class TwitterFetch {
 			while (iter.hasNext()) {
 				Status status = iter.next();
 				
+				System.out.println("<<" + status.getText() + ">>");
+				
 				// Get the location and add to the map.
 				if (status.getGeoLocation() != null) {
 					String city = dm.getGeoResolver().findCountry(
@@ -47,9 +49,12 @@ public class TwitterFetch {
 					int sad = captureOccurrences(status.getText(), Emotion.SAD);
 					
 					// Since we are happy then let's improve regional happiness and decrease sadness
-					dm.modifyIndex(Region.getRegionIndex(city), Emotion.HAPPY, (happiness / 100));
-					dm.modifyIndex(Region.getRegionIndex(city), Emotion.ANGRY, (anger / 100));
-					dm.updateIndex(Region.getRegionIndex(city), Emotion.SAD, (sad / 100));
+					dm.updateIndex(Region.getRegionIndex(city), Emotion.HAPPY, 0);
+					dm.updateIndex(Region.getRegionIndex(city), Emotion.ANGRY, 0);
+					dm.updateIndex(Region.getRegionIndex(city), Emotion.SAD, 0);
+					dm.updateIndex(Region.getRegionIndex(city), Emotion.HAPPY, happiness);
+					dm.updateIndex(Region.getRegionIndex(city), Emotion.ANGRY, anger);
+					dm.updateIndex(Region.getRegionIndex(city), Emotion.SAD, sad);
 					
 				}
 
