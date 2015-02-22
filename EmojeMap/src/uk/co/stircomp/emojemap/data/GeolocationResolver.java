@@ -1,13 +1,14 @@
 package uk.co.stircomp.emojemap.data;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
 public class GeolocationResolver {
 	
-	public final int MAX_CITIES = 150000000;
-	private final String GEO_FILE = "worldcitiespop.txt";
+	public final int MAX_CITIES = 1000000;
+	private final String GEO_FILE = "worldcitiespop.txt", GEO_LITTLE_FILE = "smallworldcitiespop.txt";
 	private City[] cities;
 	
 	public GeolocationResolver() {
@@ -25,7 +26,14 @@ public class GeolocationResolver {
 		
 		System.out.println("Loading cities ...");
 		
-		BufferedReader br = new BufferedReader(new FileReader(GEO_FILE));
+		String mapFile = GEO_FILE; 
+		
+		if (!new File(GEO_FILE).exists()) {
+			System.out.println("Using petite cities index ...");
+			mapFile = GEO_LITTLE_FILE;
+		}
+		
+		BufferedReader br = new BufferedReader(new FileReader(mapFile));
 		String line;
 		int lineCount = 0;
 		while ((line = br.readLine()) != null && (lineCount < MAX_CITIES)) {
