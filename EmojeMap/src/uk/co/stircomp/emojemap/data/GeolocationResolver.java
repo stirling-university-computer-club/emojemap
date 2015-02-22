@@ -7,8 +7,8 @@ import java.io.IOException;
 
 public class GeolocationResolver {
 	
-	public final int MAX_CITIES = 1000000;
-	private final String GEO_FILE = "worldcitiespop.txt", GEO_LITTLE_FILE = "smallworldcitiespop.txt";
+	public final int MAX_CITIES = 10000000;
+	private final String GEO_FILE = "bigworldcitiespop.txt", GEO_LITTLE_FILE = "smallworldcitiespop.txt";
 	private City[] cities;
 	
 	public GeolocationResolver() {
