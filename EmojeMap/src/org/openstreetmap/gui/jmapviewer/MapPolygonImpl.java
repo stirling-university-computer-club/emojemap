@@ -5,21 +5,33 @@ import java.awt.AlphaComposite;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Composite;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.Stroke;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import org.openstreetmap.gui.jmapviewer.interfaces.ICoordinate;
 import org.openstreetmap.gui.jmapviewer.interfaces.MapPolygon;
 
 public class MapPolygonImpl extends MapObjectImpl implements MapPolygon {
 
+	private BufferedImage upArrow;
+	private BufferedImage downArrow;
+	private BufferedImage equalArrow;
     private List<? extends ICoordinate> points;
+    private boolean arrowChoice = true;
+    private int changed;
 
     public MapPolygonImpl(ICoordinate ... points) {
         this(null, null, points);
@@ -31,7 +43,7 @@ public class MapPolygonImpl extends MapObjectImpl implements MapPolygon {
         this(null, name, points);
     }
     public MapPolygonImpl(String name, ICoordinate ... points) {
-        this(null, name, points);
+        this(null, name, points);        
     }
     public MapPolygonImpl(Layer layer, List<? extends ICoordinate> points) {
         this(layer, null, points);
@@ -92,8 +104,52 @@ public class MapPolygonImpl extends MapObjectImpl implements MapPolygon {
         Point corner = rec.getLocation();
         Point p= new Point(corner.x+(rec.width/2), corner.y+(rec.height/2));
         if(getLayer()==null||getLayer().isVisibleTexts()) paintText(g, p);
+        if(arrowChoice)
+        {
+        	paintPred(g, p);
+        }
     }
-
+    
+    public void paintPred(Graphics g, Point position) {
+    	upArrow = null;
+    	downArrow = null;
+    	equalArrow = null;
+    	try {
+    	    upArrow = ImageIO.read(new File("upArrow.png"));
+    	} catch (IOException e) {
+    		System.out.println("OH GOD OH NOES1");
+    	}
+    	if(g!=null && position!=null && changed == 0){
+            g.drawImage(upArrow, position.x+MapMarkerDot.DOT_RADIUS+2, position.y+MapMarkerDot.DOT_RADIUS, null);
+         }
+    	
+    	try {
+    	    downArrow = ImageIO.read(new File("downArrow.png"));
+    	} catch (IOException e) {
+    		System.out.println("OH GOD OH NOES2");
+    	}
+    	if(g!=null && position!=null && changed == 1){
+            g.drawImage(downArrow, position.x+MapMarkerDot.DOT_RADIUS+2, position.y+MapMarkerDot.DOT_RADIUS, null);
+         }
+    	
+    	try {
+    	   equalArrow = ImageIO.read(new File("equalArrow.png"));
+    	} catch (IOException e) {
+    		System.out.println("OH GOD OH NOES3");
+    	}
+        if(g!=null && position!=null && changed == 2){
+           g.drawImage(equalArrow, position.x+MapMarkerDot.DOT_RADIUS+2, position.y+MapMarkerDot.DOT_RADIUS, null);
+        }
+    }
+    public void setArrow(boolean given)
+    {
+    	arrowChoice = given;
+    }
+    public void setChange(int i)
+    {
+    	changed = i;
+    }
+    
     public static Style getDefaultStyle(){
         return new Style(Color.BLUE, new Color(100,100,100,50), new BasicStroke(2), getDefaultFont());
     }

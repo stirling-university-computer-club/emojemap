@@ -50,6 +50,9 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener, Action
     private static final long serialVersionUID = 1L;
 
     private JMapViewerTree treeMap = null;
+    
+    private int upMovement;
+    private int downMovement;
 
     private JLabel zoomLabel=null;
     private JLabel zoomValue=null;
@@ -58,16 +61,19 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener, Action
     private JLabel mperpLabelValue = null;
     
     final JComboBox showEmotions;
+    private JButton predict;
     
     final DataManager data;
     
     final ArrayList<MapPolygonImpl> countryList = new ArrayList<MapPolygonImpl>();  
     final ArrayList<Float> previousData = new ArrayList<Float>();
+    final ArrayList<Float> predictList = new ArrayList<Float>();
     final ArrayList<Integer> upOrDown = new ArrayList<Integer>();
     
     String[] emotionList;
     
     private int currentEmotion;
+    private boolean togglePred = false;
 
     /**
      * Constructs the {@code Demo}.
@@ -86,6 +92,7 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener, Action
         {
         	previousData.add(0f);
         	upOrDown.add(0);
+        	predictList.add(0f);
         }
 
         // Listen to the map viewer for user operations so components will
@@ -293,39 +300,14 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener, Action
         
 
         
-        emotionList = new String[]{"Blank", "Display Anger", "Display Sadness", "Diaplay Fear", "Display Happiness"};
+        emotionList = new String[]{"Display Happiness", "Blank", "Display Anger", "Display Sadness", "Diaplay Fear", "Display Happiness"};
         showEmotions = new JComboBox(emotionList);
-        showEmotions.addActionListener(this); 
-//        {
-//            public void actionPerformed(ActionEvent e) {
-//               	if (showEmotions.getSelectedItem().equals("Blank"))
-//            	{	
-//               		clearScreen();
-//            	}
-//            	if (showEmotions.getSelectedItem().equals("Display Anger"))
-//            	{	
-//            		clearScreen();
-//            		emotionScreen(Emotion.ANGRY, 255, 0, 0);
-//            	}
-//            	if (showEmotions.getSelectedItem().equals("Display Sadness"))
-//            	{
-//            		clearScreen();
-//            		emotionScreen(Emotion.SAD, 0, 0, 255);
-//            	}
-//            	if (showEmotions.getSelectedItem().equals("Display Fear"))
-//            	{
-//            		clearScreen();
-//            		emotionScreen(Emotion.FEAR, 0, 255, 0);
-//            	}
-//            	if (showEmotions.getSelectedItem().equals("Display Happiness"))
-//            	{
-//            		clearScreen();
-//            		emotionScreen(Emotion.HAPPY, 255, 255, 0);
-//            	}
-//            }
-//        }
- 
+        showEmotions.addActionListener(this);  
         panelBottom.add(showEmotions);
+        
+        predict = new JButton("Predict");
+        predict.addActionListener(this);  
+        panelBottom.add(predict);
         
         //LayerGroup germanyGroup = new LayerGroup("Germany");
     	//Layer germanyWestLayer = germanyGroup.addLayer("Germany West");
@@ -404,29 +386,43 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener, Action
     }
     
     public void actionPerformed(ActionEvent e) {
-       	if (showEmotions.getSelectedItem().equals("Blank"))
-    	{	
-       		clearScreen();
-    	}
-    	if (showEmotions.getSelectedItem().equals("Display Anger"))
-    	{	
-    		clearScreen();
-    		emotionScreen(Emotion.ANGRY, 255, 0, 0);
-    	}
-    	if (showEmotions.getSelectedItem().equals("Display Sadness"))
+    	if(e.getSource().equals(predict))
     	{
-    		clearScreen();
-    		emotionScreen(Emotion.SAD, 0, 0, 255);
+    		if (togglePred == false)
+    		{
+    			togglePred = true;
+    		}
+    		else
+    		{
+    			togglePred = false;
+    		}
     	}
-    	if (showEmotions.getSelectedItem().equals("Display Fear"))
+    	else
     	{
-    		clearScreen();
-    		emotionScreen(Emotion.FEAR, 0, 255, 0);
-    	}
-    	if (showEmotions.getSelectedItem().equals("Display Happiness"))
-    	{
-    		clearScreen();
-    		emotionScreen(Emotion.HAPPY, 255, 255, 0);
+	       	if (showEmotions.getSelectedItem().equals("Blank"))
+	    	{	
+	       		clearScreen();
+	    	}
+	    	if (showEmotions.getSelectedItem().equals("Display Anger"))
+	    	{	
+	    		clearScreen();
+	    		emotionScreen(Emotion.ANGRY, 255, 0, 0);
+	    	}
+	    	if (showEmotions.getSelectedItem().equals("Display Sadness"))
+	    	{
+	    		clearScreen();
+	    		emotionScreen(Emotion.SAD, 0, 0, 255);
+	    	}
+	    	if (showEmotions.getSelectedItem().equals("Display Fear"))
+	    	{
+	    		clearScreen();
+	    		emotionScreen(Emotion.FEAR, 0, 255, 0);
+	    	}
+	    	if (showEmotions.getSelectedItem().equals("Display Happiness"))
+	    	{
+	    		clearScreen();
+	    		emotionScreen(Emotion.HAPPY, 255, 255, 0);
+	    	}
     	}
     }
     	
@@ -442,20 +438,40 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener, Action
     	this.currentEmotion = currentEmotion;
 		for(int i = 0; i < countryList.size(); i++){
 			float j = data.getRegionalIndex(Region.getRegionIndex(countryList.get(i).getName()), currentEmotion);
-			if(j > previousData.get(i))
+			float k = previousData.get(i);
+			if(j > k)
 			{
 				upOrDown.set(i, 0);
+				downMovement++;
 			}
-			else if(j < previousData.get(i))
+			else if(j < k)
 			{
 				upOrDown.set(i, 2);
+				upMovement++;
 			}
 			else
 			{
 				upOrDown.set(i, 1);
+				downMovement--;
+				upMovement--;
 			}
 			previousData.set(i, j);
 			//System.out.println(countryList.get(i).getName() + " = " + (int)(j * 255));
+			countryList.get(i).setArrow(togglePred);
+			if (upMovement > 3)
+			{
+				countryList.get(i).setChange(1);
+				upMovement = 0;
+			}
+			else if (downMovement > 3)
+			{
+				countryList.get(i).setChange(0);
+				downMovement = 1;
+			}
+			else
+			{
+				countryList.get(i).setChange(2);
+			}
 			countryList.get(i).setBackColor(new Color(r, g, b, (int)(j * 255)));
 			countryList.get(i).setColor(new Color(127 * upOrDown.get(i),127 * upOrDown.get(i),127 * upOrDown.get(i)));
 		}
@@ -489,8 +505,7 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener, Action
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		actionPerformed(new ActionEvent(showEmotions, currentEmotion, "dummy"));
-		
+		actionPerformed(new ActionEvent(showEmotions, currentEmotion, "dummy"));		
 	}
     
 
