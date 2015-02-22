@@ -142,10 +142,20 @@ public class BloombergRequest {
 				response.append(inputLine);
 			}
 			in.close();
+			
+			// Nullify
+			clientStore = null;
+			kmf = null;
+			trustStore = null;
+			sslContext = SSLContext.getDefault();
+			HttpsURLConnection.setDefaultSSLSocketFactory(sslContext .getSocketFactory());
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		// Cleanup
+		
 		
 		return BloombergResponse.generateResponse(response.toString());
 
