@@ -5,10 +5,17 @@ public class DataManager implements Runnable {
 	private String message;
 	private float[][] index;
 	private boolean initialised = false;
+	private GeolocationResolver resolver;
 	
 	public String getMessage() {
 		
 		return message;
+		
+	}
+	
+	public GeolocationResolver getGeoResolver() {
+		
+		return resolver;
 		
 	}
 	
@@ -27,8 +34,11 @@ public class DataManager implements Runnable {
 		setMessage("Initialising indexes to zero");
 		initialiseIndexes();
 		
+		setMessage("Initialising location resolver");
+		resolver = new GeolocationResolver();
+		
 		setMessage("Fetching Twitter.");
-		new TwitterFetch();		
+		new TwitterFetch(this);		
 		
 		while (true) {
 			
@@ -88,6 +98,7 @@ public class DataManager implements Runnable {
 		}
 		
 		index[region][emotion] = value;
+		normaliseIndex(region, emotion);
 		
 	}
 	
@@ -98,6 +109,14 @@ public class DataManager implements Runnable {
 		}
 		
 		index[region][emotion] *= value;
+		normaliseIndex(region, emotion);
+		
+	}
+	
+	private void normaliseIndex(int region, int emotion) {
+		
+		if (index[region][emotion] > 1.0f) index[region][emotion] = 1.0f;
+		if (index[region][emotion] < 0.0f) index[region][emotion] = 0.0f;
 		
 	}
 

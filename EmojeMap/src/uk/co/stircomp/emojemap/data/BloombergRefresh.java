@@ -111,12 +111,10 @@ public class BloombergRefresh {
 			String region = s.getFieldValue("REGION_OR_COUNTRY");			
 			double rate = 1- (Double.parseDouble(s.getFieldValue("PX_LAST")) / 50);
 			
-			dm.modifyIndex(Region.getRegionIndex(region), Emotion.HAPPY, (float) rate);
+			dm.modifyIndex(Region.getRegionIndex(region), Emotion.HAPPY, 1.0f + (1.0f / (float)rate));
 			dm.modifyIndex(Region.getRegionIndex(region), Emotion.SAD, (float) rate);
 			dm.modifyIndex(Region.getRegionIndex(region), Emotion.ANGRY, (float) rate);
 			dm.modifyIndex(Region.getRegionIndex(region), Emotion.FEAR, (float) rate);
-			
-			System.out.println(region + " = " + rate);
 			
 		}
 		

@@ -1,7 +1,5 @@
 package uk.co.stircomp.emojemap;
 
-import javax.net.ssl.SSLEngineResult.Status;
-
 import twitter4j.Query;
 import twitter4j.QueryResult;
 import twitter4j.Twitter;
@@ -34,7 +32,5 @@ public class SearchTwitter implements SearchResource
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-
 	
 }

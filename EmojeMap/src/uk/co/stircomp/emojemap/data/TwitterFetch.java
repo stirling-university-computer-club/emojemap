@@ -1,11 +1,10 @@
 package uk.co.stircomp.emojemap.data;
 
-import twitter4j.Query;
 import uk.co.stircomp.emojemap.SearchTwitter;
 
 public class TwitterFetch {
 	
-	public TwitterFetch() {
+	public TwitterFetch(DataManager dm) {
 		
 		try {		
 			
@@ -15,12 +14,12 @@ public class TwitterFetch {
 			
 			//Query q = new Query();
 			
-			for (int i=0 ; i < happyWords.length ; i++){
+			for (int i=0 ; i < angryWords.length ; i++){
 				SearchTwitter.query(angryWords[i]);
 				System.out.println(SearchTwitter.search(angryWords[i]));
 			}
 			
-			for (int i=0 ; i < angryWords.length ; i++){
+			for (int i=0 ; i < happyWords.length ; i++){
 				SearchTwitter.query(happyWords[i]);
 				System.out.println(SearchTwitter.search(happyWords[i]));
 			}
