@@ -108,10 +108,11 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener  {
         });
         JComboBox<TileSource> tileSourceSelector = new JComboBox<>(new TileSource[] {
                 new OsmTileSource.Mapnik(),
-                new OsmTileSource.CycleMap(),
+               // new OsmTileSource.CycleMap(),
                 new BingAerialTileSource(),
-                new MapQuestOsmTileSource(),
-                new MapQuestOpenAerialTileSource() });
+               // new MapQuestOsmTileSource(),
+               // new MapQuestOpenAerialTileSource() 
+                });
         tileSourceSelector.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
                 map().setTileSource((TileSource) e.getItem());
