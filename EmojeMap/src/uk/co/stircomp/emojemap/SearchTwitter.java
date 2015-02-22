@@ -1,5 +1,6 @@
 package uk.co.stircomp.emojemap;
 
+import twitter4j.GeoLocation;
 import twitter4j.Query;
 import twitter4j.QueryResult;
 import twitter4j.Twitter;
@@ -12,12 +13,16 @@ public class SearchTwitter implements SearchResource
 	
 	static Twitter twitter = TwitterFactory.getSingleton();
 	
-	public static QueryResult search(String word) throws TwitterException{
+	public static QueryResult search(String word, GeoLocation loc) throws TwitterException{
 		
 		// The factory instance is re-useable and thread safe.
 	    
 	    Query query = new Query(word);
-	    QueryResult result = twitter.search(query);
+	    
+	    query.setGeoCode(loc, 2500, Query.Unit.mi);
+	    query.setCount(100);
+	    query.setResultType(Query.ResultType.recent);
+	    QueryResult result = twitter.search(query);	    
 		
 		return result;
 	}
@@ -32,5 +37,6 @@ public class SearchTwitter implements SearchResource
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 	
 }

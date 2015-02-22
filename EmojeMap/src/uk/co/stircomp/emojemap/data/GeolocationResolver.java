@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class GeolocationResolver {
 	
-	public final int MAX_CITIES = 10000000;
+	public final int MAX_CITIES = 15000000;
 	private final String GEO_FILE = "bigworldcitiespop.txt", GEO_LITTLE_FILE = "smallworldcitiespop.txt";
 	private City[] cities;
 	
@@ -40,6 +40,7 @@ public class GeolocationResolver {
 			
 			String[] s = line.split(",");
 			cities[lineCount++] = new City(s[0], s[2], Double.parseDouble(s[5]), Double.parseDouble(s[6]));
+			//System.out.println(lineCount + ":" + line);
 			
 		}
 		br.close();
@@ -48,7 +49,7 @@ public class GeolocationResolver {
 		
 	}
 	
-	public int findCountry(double lng , double lat) {
+	public String findCountry(double lng , double lat) {
 		
 		double shortest = 100000;
 		double dd = 0;
@@ -56,12 +57,16 @@ public class GeolocationResolver {
 		
 		for (int i = 0; i < cities.length; i++) {
 			
-			if (cities[i] == null) continue;
+			if (cities[i] == null) {
+				//System.err.println("Empty city block!");
+				return cities[index].getCountry();
+			}
 			
 			dd = cities[i].distanceTo(lng, lat);
 			if (dd < shortest) {
 				shortest = dd;
 				index = i;
+				//System.err.println("Closest is now " + shortest + " at " + cities[i].getName());
 			}
 			
 		}

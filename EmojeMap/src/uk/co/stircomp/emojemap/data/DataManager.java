@@ -40,7 +40,7 @@ public class DataManager implements Runnable {
 		setMessage("Fetching Twitter.");
 		new TwitterFetch(this);		
 		
-		while (true) {
+		while (message.equals("dave")) {
 			
 			setMessage("Refreshing Bloomberg data");
 			try {
