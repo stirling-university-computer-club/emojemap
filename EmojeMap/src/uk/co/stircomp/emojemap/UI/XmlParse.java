@@ -173,7 +173,8 @@ public class XmlParse {
 				}
 				System.out.println(");");
 				System.out.println("countryList.add(" + variableName + ");");
-				System.out.println();				
+				System.out.println();
+				
 			}
 			
 		}
