@@ -21,10 +21,6 @@ public class Start {
 		
 		data.getRegionalIndex(Region.getRegionIndex("africa"), Emotion.getEmotionIndex("anger"));
 		
-		// // Sound
-		Sound s = new Sound("data/music.wav");
-		s.start();
-		
 	}
 	
 	
