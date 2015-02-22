@@ -52,10 +52,6 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener, Action
 
     private JMapViewerTree treeMap = null;
     
-    private int upMovement;
-    private int downMovement;
-    private int noMovement;
-
     private JLabel zoomLabel=null;
     private JLabel zoomValue=null;
 
@@ -453,44 +449,43 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener, Action
 			if(j > k)
 			{
 				upOrDown.set(i, 0);
-				downMovement+= Math.round((j-k) * 10);
+				countryList.get(i).setChange(Math.round(-(j-k) * 10));
 			}
 			else if(j < k)
 			{
 				upOrDown.set(i, 2);
-				upMovement += Math.round((k - j) * 10);
+				countryList.get(i).setChange(Math.round((k - j) * 10));
 			}
 			else
 			{
 				upOrDown.set(i, 1);
-				noMovement++;
 			}
 			previousData.set(i, j);
 			//System.out.println(countryList.get(i).getName() + " = " + (int)(j * 255));
 			countryList.get(i).setArrow(togglePred);
-			if (upMovement > 2 && upMovement > downMovement && elapsedTime > 100)
-			{
-				countryList.get(i).setChange(1);
-
-				downMovement--;
-				noMovement = 0;
-			}
-			if (downMovement > 2 && downMovement > upMovement && elapsedTime > 100)
-			{
-				countryList.get(i).setChange(0);
-
-				upMovement--;
-				noMovement = 0;
-			}
-			if (noMovement > 3 && elapsedTime > 100)
-			{
-				countryList.get(i).setChange(2);
-			}
-			if (elapsedTime > 200)
-			{
-				downMovement /= 1.1;
-				upMovement /= 1.1;
-			}
+//			if (upMovement > 2 && elapsedTime > 100)
+//			{
+//				countryList.get(i).setChange(1);
+//
+//				downMovement--;
+//				noMovement = 0;
+//			}
+//			if (downMovement > 2 && elapsedTime > 100)
+//			{
+//				countryList.get(i).setChange(0);
+//
+//				upMovement--;
+//				noMovement = 0;
+//			}
+//			if (noMovement > 3 && elapsedTime > 100)
+//			{
+//				countryList.get(i).setChange(2);
+//			}
+//			if (elapsedTime > 200)
+//			{
+//				downMovement /= 1.1;
+//				upMovement /= 1.1;
+//			}
 			countryList.get(i).setBackColor(new Color(r, g, b, (int)(j * 255)));
 			countryList.get(i).setColor(new Color(127 * upOrDown.get(i),127 * upOrDown.get(i),127 * upOrDown.get(i)));
 		}

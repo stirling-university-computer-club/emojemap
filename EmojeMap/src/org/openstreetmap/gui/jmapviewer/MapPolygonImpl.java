@@ -31,7 +31,11 @@ public class MapPolygonImpl extends MapObjectImpl implements MapPolygon {
 	private BufferedImage equalArrow;
     private List<? extends ICoordinate> points;
     private boolean arrowChoice = true;
-    private int changed;
+    private double changed;
+    private double lastChanged;
+    private int upMovement = 0;
+    private int downMovement = 0;
+    private int noMovement = 0;
 
     public MapPolygonImpl(ICoordinate ... points) {
         this(null, null, points);
@@ -114,13 +118,16 @@ public class MapPolygonImpl extends MapObjectImpl implements MapPolygon {
     	upArrow = null;
     	downArrow = null;
     	equalArrow = null;
+
     	try {
     	    upArrow = ImageIO.read(new File("upArrow.png"));
     	} catch (IOException e) {
     		System.out.println("OH GOD OH NOES1");
     	}
-    	if(g!=null && position!=null && changed == 0){
+    	if(g!=null && position!=null && changed > 0 && changed <= 2){
             g.drawImage(upArrow, position.x+MapMarkerDot.DOT_RADIUS+2, position.y+MapMarkerDot.DOT_RADIUS, null);
+            lastChanged = changed;
+            return;
          }
     	
     	try {
@@ -128,26 +135,34 @@ public class MapPolygonImpl extends MapObjectImpl implements MapPolygon {
     	} catch (IOException e) {
     		System.out.println("OH GOD OH NOES2");
     	}
-    	if(g!=null && position!=null && changed == 1){
+    	if(g!=null && position!=null && changed >= 2){
             g.drawImage(downArrow, position.x+MapMarkerDot.DOT_RADIUS+2, position.y+MapMarkerDot.DOT_RADIUS, null);
+            lastChanged = changed;
+            return;
          }
-    	
     	try {
-    	   equalArrow = ImageIO.read(new File("equalArrow.png"));
-    	} catch (IOException e) {
-    		System.out.println("OH GOD OH NOES3");
-    	}
-        if(g!=null && position!=null && changed == 2){
-           g.drawImage(equalArrow, position.x+MapMarkerDot.DOT_RADIUS+2, position.y+MapMarkerDot.DOT_RADIUS, null);
-        }
+      	   equalArrow = ImageIO.read(new File("equalArrow.png"));
+      	} catch (IOException e) {
+      		System.out.println("OH GOD OH NOES3");
+      	}
+          if(g!=null && position!=null){
+             g.drawImage(equalArrow, position.x+MapMarkerDot.DOT_RADIUS+2, position.y+MapMarkerDot.DOT_RADIUS, null);
+             lastChanged = changed;
+             return;
+          }
     }
+    
     public void setArrow(boolean given)
     {
     	arrowChoice = given;
     }
-    public void setChange(int i)
+    public void setChange(double d)
     {
-    	changed = i;
+    	changed+= d;
+    	if (changed < 0)
+    	{
+    		changed = 0;
+    	}
     }
     
     public static Style getDefaultStyle(){
