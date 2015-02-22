@@ -6,6 +6,7 @@ public class DataManager implements Runnable {
 	private float[][] index;
 	private boolean initialised = false;
 	private GeolocationResolver resolver;
+	private DataStatusView window;
 	
 	public String getMessage() {
 		
@@ -23,11 +24,15 @@ public class DataManager implements Runnable {
 		
 		this.message = m;
 		System.out.println("DMSG: " + m);
+		window.setTitle(m);
 		
 	}
 
 	@Override
 	public void run() {
+		
+		window = new DataStatusView();
+		window.setVisible(true);		
 		
 		setMessage("Starting data.");
 		
@@ -43,12 +48,14 @@ public class DataManager implements Runnable {
 			try {
 				new BloombergRefresh(this);
 			} catch (Exception e) { e.printStackTrace(); }
-			
+			setMessage("Fetched.");
 			try {
-				Thread.sleep(5000);
+				Thread.sleep(3000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+						
+			window.setVisible(false);
 		
 	}
 	
