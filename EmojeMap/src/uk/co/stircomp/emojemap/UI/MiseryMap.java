@@ -398,8 +398,8 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener  {
     	this.currentEmotion = currentEmotion;
 		for(int i = 0; i < countryList.size(); i++){
 			float j = data.getRegionalIndex(Region.getRegionIndex(countryList.get(i).getName()), currentEmotion);
-			System.out.println(j);
-			countryList.get(i).setBackColor(new Color(r, g, b, (int)(j * 100 + 1)));
+			//System.out.println(countryList.get(i).getName() + " = " + (int)(j * 255));
+			countryList.get(i).setBackColor(new Color(r, g, b, (int)(j * 255)));
 			countryList.get(i).setColor(new Color(120,120,120));
 		}
 

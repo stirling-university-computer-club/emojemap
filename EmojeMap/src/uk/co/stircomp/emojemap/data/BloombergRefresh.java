@@ -8,6 +8,7 @@ public class BloombergRefresh {
 		
 		refreshDebt(dm);
 		refreshEmployment(dm);
+		refreshHousePrice(dm);
 		
 	}
 	
@@ -61,7 +62,9 @@ public class BloombergRefresh {
 			
 			double debt = Double.parseDouble(s.getFieldValue("PX_LAST"));
 			
-			if (debt >= 1500000.0) {			
+			if (debt >= 1500000.0) {	
+				
+						
 				dm.modifyIndex(Region.getRegionIndex(region), Emotion.SAD, 1.5f);
 				dm.modifyIndex(Region.getRegionIndex(region), Emotion.FEAR, 1.6f);
 				dm.modifyIndex(Region.getRegionIndex(region), Emotion.HAPPY, 0.6f);
@@ -95,7 +98,26 @@ public class BloombergRefresh {
 				"UMRTSE Index",
 				"UMRTIE Index",
 				"UMRTNL Index",
-				"UMRTDK Index"
+				"UMRTDK Index",
+				"UMRTUK Index",
+				"UMRTFI Index",
+				"UMRTEE Index",
+				"UMRTCZ Index",
+				"UMRTLU Index",
+				"UMRTBE Index",
+				"UMRTCY Index",
+				"UMRTPL Index",
+				"UMRTRO Index",
+				"UMRTBG Index",
+				"UMRTSK Index",
+				"UMRT25 Index",
+				"UMRTNO Index",
+				"UMRTLT Index",
+				"UMRTLV Index",
+				"UMRTSI Index",
+				"UMRTHR Index",
+				"UMRTHU Index",
+				"UMRTMT Index"
 		};
 		String[] fields = { "PX_LAST", "REGION_OR_COUNTRY",  "SECURITY_DES" };
 		
@@ -108,10 +130,15 @@ public class BloombergRefresh {
 			
 			BlSecurity s = li.next();
 			
-			String region = s.getFieldValue("REGION_OR_COUNTRY");			
+			String region = s.getFieldValue("REGION_OR_COUNTRY");	
+			
+			if (region == null) continue;
+			
 			double rate = 1- (Double.parseDouble(s.getFieldValue("PX_LAST")) / 50);
 			
-			dm.modifyIndex(Region.getRegionIndex(region), Emotion.HAPPY, 1.0f + (1.0f / (float)rate));
+			System.out.println(region + " UNEMP " + rate);
+			
+			dm.modifyIndex(Region.getRegionIndex(region), Emotion.HAPPY, 1.0f + (float)rate);
 			dm.modifyIndex(Region.getRegionIndex(region), Emotion.SAD, (float) rate);
 			dm.modifyIndex(Region.getRegionIndex(region), Emotion.ANGRY, (float) rate);
 			dm.modifyIndex(Region.getRegionIndex(region), Emotion.FEAR, (float) rate);
@@ -122,5 +149,68 @@ public class BloombergRefresh {
 		
 	}
 	
+	private void refreshHousePrice(DataManager dm) {
+		
+		String[] eulCodes = {
+				"HOPIDEI Index",
+				"HOPISEI Index",
+				"HOPIIEI Index",
+				"HOPIEUI Index",
+				"HOPIGRI Index",
+				"HOPIDKI Index",
+				"HOPIITI Index",
+				"HOPIEAI Index",
+				"HOPINOI Index",
+				"HOPINLI Index",
+				"HOPIPTI Index",
+				"HOPIFRI Index",
+				"HOPIROI Index",
+				"HOPICZI Index",
+				"HOPISKI Index",
+				"HOPICYI Index",
+				"HOPIISI Index",
+				"HOPIFII Index",
+				"HOPIBGI Index",
+				"HOPIESI Index",
+				"HOPIHUI Index",
+				"HOPIATI Index",
+				"HOPISII Index",
+				"HOPIEEI Index",
+				"HOPILTI Index",
+				"HOPILUI Index",
+				"HOPILVI Index",
+				"HOPIMTI Index",
+				"HOPIUKI Index"
+		};
+		String[] fields = { "PX_LAST", "REGION_OR_COUNTRY",  "SECURITY_DES" };
+		
+		BloombergRequest r = new BloombergRequest(eulCodes, fields);
+		BloombergResponse response = r.make();
+		
+		
+		ListIterator<BlSecurity> li = response.getSecurities().listIterator();
+		while (li.hasNext()) {			
+			
+			BlSecurity s = li.next();
+			
+			String region = s.getFieldValue("REGION_OR_COUNTRY");	
+			
+			if (region == null) continue;
+			
+			double rate = 1- (Double.parseDouble(s.getFieldValue("PX_LAST")) / 50);
+			if (rate > 1.0f) rate *= 0.1;
+
+			System.out.println(region + " HP " + rate);
+			
+			dm.modifyIndex(Region.getRegionIndex(region), Emotion.HAPPY, 1.0f + (1.0f - (float)rate));
+			dm.modifyIndex(Region.getRegionIndex(region), Emotion.SAD, 1.0f + (float)rate);
+			dm.modifyIndex(Region.getRegionIndex(region), Emotion.ANGRY, 1.0f + (float)rate);
+			//dm.modifyIndex(Region.getRegionIndex(region), Emotion.FEAR, (float) rate);
+			
+		}
+		
+		System.out.println("COUNTRY HOUSE PRICE WAS REFRESHED.");
+		
+	}
 
 }

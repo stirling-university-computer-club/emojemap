@@ -38,10 +38,7 @@ public class DataManager implements Runnable {
 		resolver = new GeolocationResolver();
 		
 		setMessage("Fetching Twitter.");
-		new TwitterFetch(this);		
-		
-		while (message.equals("dave")) {
-			
+		 new TwitterFetch(this);	
 			setMessage("Refreshing Bloomberg data");
 			try {
 				new BloombergRefresh(this);
@@ -52,8 +49,6 @@ public class DataManager implements Runnable {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-		
-		}
 		
 	}
 	
@@ -105,6 +100,10 @@ public class DataManager implements Runnable {
 	public void modifyIndex(int region, int emotion, float value) {
 		
 		if (region > index.length || emotion > index[0].length || region < 0 || emotion < 0) {
+			return;
+		}
+		
+		if (value == 0.0f) {
 			return;
 		}
 		
