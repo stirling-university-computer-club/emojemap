@@ -36,6 +36,7 @@ import org.openstreetmap.gui.jmapviewer.tilesources.MapQuestOsmTileSource;
 import org.openstreetmap.gui.jmapviewer.tilesources.OsmTileSource;
 
 import uk.co.stircomp.emojemap.data.DataManager;
+import uk.co.stircomp.emojemap.data.DataPointUpdate;
 import uk.co.stircomp.emojemap.data.Emotion;
 import uk.co.stircomp.emojemap.data.Region;
 
@@ -505,6 +506,11 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener, Action
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
+		
+		DataPointUpdate dpUpdate = (DataPointUpdate) arg1;
+		
+		if (dpUpdate.getEmotion() != this.currentEmotion) return;
+		
 		actionPerformed(new ActionEvent(showEmotions, currentEmotion, "dummy"));		
 	}
     
