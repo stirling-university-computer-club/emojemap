@@ -19,7 +19,7 @@ public class RandomChanges implements Runnable {
 		while(true) {
 			
 			dm.updateIndex(rand.nextInt(Region.REGIONS.length), Emotion.FEAR, rand.nextFloat());
-			
+
 			try {
 				Thread.sleep(rand.nextInt(500));
 			} catch (InterruptedException e) {

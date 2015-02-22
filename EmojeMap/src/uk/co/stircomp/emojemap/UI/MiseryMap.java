@@ -53,6 +53,7 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener, Action
     
     private int upMovement;
     private int downMovement;
+    private int noMovement;
 
     private JLabel zoomLabel=null;
     private JLabel zoomValue=null;
@@ -73,7 +74,11 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener, Action
     String[] emotionList;
     
     private int currentEmotion;
-    private boolean togglePred = false;
+    private boolean togglePred = true;
+    
+    private long startTime;
+    private long currTime;
+    private long elapsedTime;
 
     /**
      * Constructs the {@code Demo}.
@@ -87,6 +92,9 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener, Action
     	this.data.addObserver(this);
 
         treeMap = new JMapViewerTree("Zones");
+        
+        startTime = System.currentTimeMillis();
+        currTime = startTime;
         
         for (int i = 0; i < 50; i++)
         {
@@ -300,7 +308,7 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener, Action
         
 
         
-        emotionList = new String[]{"Display Happiness", "Blank", "Display Anger", "Display Sadness", "Diaplay Fear", "Display Happiness"};
+        emotionList = new String[]{"Display Happiness", "Blank", "Display Anger", "Display Sadness", "Display Fear", "Display Happiness"};
         showEmotions = new JComboBox(emotionList);
         showEmotions.addActionListener(this);  
         panelBottom.add(showEmotions);
@@ -386,6 +394,8 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener, Action
     }
     
     public void actionPerformed(ActionEvent e) {
+    	elapsedTime = System.currentTimeMillis() - currTime;
+        currTime += elapsedTime;
     	if(e.getSource().equals(predict))
     	{
     		if (togglePred == false)
@@ -442,35 +452,43 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener, Action
 			if(j > k)
 			{
 				upOrDown.set(i, 0);
-				downMovement++;
+				downMovement+= Math.round((j-k) * 10);
 			}
 			else if(j < k)
 			{
 				upOrDown.set(i, 2);
-				upMovement++;
+				upMovement += Math.round((k - j) * 10);
 			}
 			else
 			{
 				upOrDown.set(i, 1);
-				downMovement--;
-				upMovement--;
+				noMovement++;
 			}
 			previousData.set(i, j);
 			//System.out.println(countryList.get(i).getName() + " = " + (int)(j * 255));
 			countryList.get(i).setArrow(togglePred);
-			if (upMovement > 3)
+			if (upMovement > 2 && upMovement > downMovement && elapsedTime > 100)
 			{
 				countryList.get(i).setChange(1);
-				upMovement = 0;
+
+				downMovement--;
+				noMovement = 0;
 			}
-			else if (downMovement > 3)
+			if (downMovement > 2 && downMovement > upMovement && elapsedTime > 100)
 			{
 				countryList.get(i).setChange(0);
-				downMovement = 1;
+
+				upMovement--;
+				noMovement = 0;
 			}
-			else
+			if (noMovement > 3 && elapsedTime > 100)
 			{
 				countryList.get(i).setChange(2);
+			}
+			if (elapsedTime > 200)
+			{
+				downMovement /= 1.1;
+				upMovement /= 1.1;
 			}
 			countryList.get(i).setBackColor(new Color(r, g, b, (int)(j * 255)));
 			countryList.get(i).setColor(new Color(127 * upOrDown.get(i),127 * upOrDown.get(i),127 * upOrDown.get(i)));
