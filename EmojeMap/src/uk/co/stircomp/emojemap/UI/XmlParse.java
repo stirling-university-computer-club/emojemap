@@ -12,7 +12,6 @@ import org.w3c.dom.NodeList;
 
 public class XmlParse {
 
-	
 	public static void main (String[] args)
 	{
 		ArrayList<ArrayList<String>> coordinates = new ArrayList<ArrayList<String>>();
@@ -44,11 +43,21 @@ public class XmlParse {
 				NodeList country = data.item(i).getChildNodes();
 				// coordinates
 				// polygons 1
-				NodeList polygons = getNode(getNode(country,"geometry").getChildNodes(),"MultiGeometry").getChildNodes();
+				
+				/*
+				for (int j = 0; i < getNode(country,"geometry").getChildNodes().getLength(); i++)
+					System.out.println(getNode(country,"geometry").getChildNodes().item(i).getNodeName());
+				*/
+				NodeList polygons = null;
+
+				if (getNode(getNode(country,"geometry").getChildNodes(), "MultiGeometry") == null)
+					polygons = getNode(country,"geometry").getChildNodes();
+				else
+					polygons = getNode(getNode(country,"geometry").getChildNodes(), "MultiGeometry").getChildNodes();
+				
 				for (int j = 1; j < polygons.getLength(); j += 2)
 				{
 					// polygon -> outerBoundaryIs -> LinearRing -> coordinates
-					//System.out.println();
 					Node item = getNode(getNode(getNode(polygons.item(j).getChildNodes(),"outerBoundaryIs").getChildNodes(),"LinearRing").getChildNodes(),"coordinates");
 					//System.out.println(item.getTextContent());
 					coordinates.get(arrayIndex).add(item.getTextContent());
@@ -102,15 +111,56 @@ public class XmlParse {
 		}
 		
 
-		// MapPolygon andorra = new MapPolygonImpl("Andorra", c(1.44583614022,42.601945143), c(1.73860914671,42.6163911862), c(1.72360906013,42.5094360894), c(1.45152728555,42.4462450884), c(1.44583614022,42.601945143));
-		// coutryList.add(andorra);
-		
-		
 		for (int i = 0; i < names.size(); i++)
 		{
 			for (int j = 0; j < coordinates.get(i).size(); j++)
 			{
-				System.out.print("MapPolygonImpl " + names.get(i).toLowerCase() + j + " = new MapPolygonImpl(\"" + names.get(i) + "\", ");
+				
+				StringBuilder variableName = new StringBuilder();
+				if (names.get(i).contains(" ") && names.get(i).contains("."))
+				{
+					StringBuilder tmp = new StringBuilder();
+
+					String [] nameArr1 = names.get(i).split(" ");
+					for (int a = 0; a < nameArr1.length; a++)
+					{
+						if (a == 0)
+							tmp.append(nameArr1[a].toLowerCase());
+						else
+							tmp.append(nameArr1[a]);
+					}
+					String [] nameArr2 = names.get(i).split(".");
+					for (int a = 0; a < nameArr2.length; a++)
+					{
+						if (a == 0)
+							variableName.append(nameArr2[a].toLowerCase());
+						else
+							variableName.append(nameArr2[a]);
+					}
+				}
+				else if (names.get(i).contains(" ") || names.get(i).contains("."))
+				{
+					String seperator = "";
+					if (names.get(i).contains(" "))
+						seperator = " ";
+					else
+						seperator = ".";
+					
+					String [] nameArr = names.get(i).split(seperator);
+					for (int a = 0; a < nameArr.length; a++)
+					{
+						if (a == 0)
+							variableName.append(nameArr[a].toLowerCase());
+						else
+							variableName.append(nameArr[a]);
+					}
+				}
+				else
+					variableName.append(names.get(i).toLowerCase());
+				
+				variableName.append(Integer.toString(j));
+				
+				System.out.print("MapPolygonImpl " + variableName + " = new MapPolygonImpl(\"" + names.get(i) + "\", ");
 			
 				for (int k = 0; k < coordinateX.get(i).get(j).size(); k++)
 				{
@@ -122,7 +172,8 @@ public class XmlParse {
 						System.out.print("c(" + x + "," + y + ")");
 				}
 				System.out.println(");");
-				System.out.println("countryList.add(" + names.get(i).toLowerCase() + j + ");");
+				System.out.println("countryList.add(" + variableName + ");");
+				System.out.println();
 			}
 			
 		}
