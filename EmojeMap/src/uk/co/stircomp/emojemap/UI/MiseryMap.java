@@ -56,6 +56,10 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener  {
     private JLabel mperpLabelValue = null;
     
     final DataManager data;
+    
+    final ArrayList<MapPolygonImpl> countryList = new ArrayList<MapPolygonImpl>();  
+    
+    private int currentEmotion;
 
     /**
      * Constructs the {@code Demo}.
@@ -175,7 +179,7 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener  {
             }
         });
         
-        final ArrayList<MapPolygonImpl> countryList = new ArrayList<MapPolygonImpl>();  
+        
         MapPolygonImpl italy = new MapPolygonImpl("Italy", c(43.78,7.532), c(44.17,7.662), c(44.28,6.976), c(44.54,6.853), c(44.83,7.032), c(45.12,6.624), c(45.26,7.128), c(45.43,7.147), c(45.79,6.799), c(45.93,7.038), c(45.92,7.856), c(46.46,8.441), c(46.25,8.445), c(45.84,9.037), c(46.50,9.294), c(46.31,9.545), c(46.38,9.947), c(46.23,10.14), c(46.54,10.05), c(46.54,10.46), c(46.87,10.47), c(46.77,11.02), c(46.97,11.18), c(47.09,12.19), c(46.93,12.16), c(46.69,12.44), c(46.53,13.72), c(46.30,13.38), c(46.18,13.67), c(46.01,13.48), c(45.64,13.92), c(45.60,13.72), c(45.77,13.63), c(45.78,13.19), c(45.64,13.09), c(45.47,12.29), c(45.26,12.16), c(44.96,12.54), c(44.72,12.25), c(44.25,12.37), c(43.57,13.60), c(42.67,14.02), c(42.09,14.74), c(41.92,15.16), c(41.91,16.15), c(41.79,16.19), c(41.61,15.90), c(41.44,15.99), c(40.64,18.01), c(40.13,18.51), c(39.79,18.35), c(39.94,18.04), c(40.28,17.86), c(40.33,17.39), c(40.41,17.20), c(40.49,17.32), c(40.45,16.92), c(39.75,16.49), c(39.40,17.15), c(38.96,17.17), c(38.80,16.60), c(38.43,16.57), c(37.92,16.06), c(38.00,15.64), c(38.23,15.63), c(38.47,15.91), c(38.63,15.83), c(38.87,16.22), c(40.03,15.66), c(40.00,15.35), c(40.23,14.94), c(40.63,14.83), c(40.60,14.40), c(40.75,14.45), c(40.82,14.07), c(41.25,13.71), c(41.26,13.03), c(42.30,11.63), c(42.40,11.10), c(42.55,11.16), c(42.96,10.59), c(44.00,10.11), c(44.43,8.747), c(43.82,7.773), c(43.78,7.532));
         countryList.add(italy);
         MapPolygonImpl uk = new MapPolygonImpl("United Kingdom", c(58.65,-3.023), c(58.38,-3.110), c(58.28,-3.337), c(57.87,-4.007), c(57.85,-3.774), c(57.57,-4.432), c(57.70,-2.076), c(57.46,-1.773), c(56.58,-2.531), c(56.36,-3.278), c(56.45,-2.884), c(56.27,-2.583), c(56.03,-3.724), c(55.94,-3.053), c(56.05,-2.631), c(55.58,-1.636), c(54.76,-1.297), c(54.11,-0.07931), c(54.01,-0.2122), c(53.58,0.1421), c(53.62,-0.1396), c(53.40,0.2356), c(53.09,0.3392), c(52.88,0.002109), c(52.78,0.3789), c(52.97,0.5478), c(52.97,0.8847), c(52.75,1.675), c(52.46,1.749), c(52.08,1.587), c(51.93,1.331), c(52.02,1.163), c(51.84,1.266), c(51.72,0.7011), c(51.74,0.9357), c(51.61,0.9525), c(51.45,0.3889), c(51.39,1.386), c(51.18,1.408), c(51.10,1.263), c(50.74,0.2539), c(50.85,-1.094), c(50.56,-2.425), c(50.73,-2.927), c(50.60,-3.437), c(50.21,-3.717), c(50.36,-4.380), c(50.17,-5.048), c(49.96,-5.193), c(50.12,-5.471), c(50.06,-5.717), c(50.60,-4.772), c(51.19,-4.228), c(51.21,-3.028), c(51.76,-2.380), c(51.38,-3.346), c(51.62,-3.838), c(51.54,-4.243), c(51.68,-4.075), c(51.73,-4.574), c(51.59,-4.941), c(51.62,-5.051), c(51.75,-4.884), c(51.73,-5.247), c(51.78,-5.103), c(51.92,-5.239), c(52.33,-4.131), c(52.91,-4.134), c(52.79,-4.758), c(53.21,-4.196), c(53.35,-2.705), c(53.36,-2.954), c(53.56,-3.106), c(53.72,-2.900), c(53.91,-3.053), c(54.22,-2.814), c(54.10,-3.215), c(54.51,-3.633), c(54.88,-3.381), c(54.97,-3.027), c(54.99,-3.571), c(54.77,-3.965), c(54.91,-4.398), c(54.68,-4.387), c(54.87,-4.852), c(54.80,-4.961), c(54.63,-4.864), c(54.99,-5.178), c(55.49,-4.614), c(55.70,-4.916), c(55.94,-4.878), c(55.92,-4.485), c(55.99,-4.855), c(56.11,-4.829), c(55.86,-4.987), c(55.85,-5.305), c(56.23,-5.032), c(56.01,-5.429), c(55.35,-5.523), c(55.31,-5.789), c(56.33,-5.571), c(56.56,-5.070), c(56.48,-5.399), c(56.81,-5.121), c(56.49,-5.677), c(56.63,-6.010), c(56.69,-5.552), c(56.70,-6.228), c(56.87,-5.663), c(56.89,-5.920), c(57.00,-5.524), c(57.11,-5.725), c(57.11,-5.403), c(57.16,-5.648), c(57.23,-5.405), c(57.33,-5.599), c(57.42,-5.451), c(57.36,-5.818), c(57.57,-5.840), c(57.53,-5.510), c(57.64,-5.811), c(57.82,-5.817), c(57.85,-5.103), c(58.07,-5.453), c(58.08,-5.281), c(58.26,-5.389), c(58.26,-5.072), c(58.35,-5.175), c(58.62,-5.002), c(58.56,-4.702), c(58.45,-4.761), c(58.57,-4.578), c(58.65,-3.023));
@@ -209,75 +213,35 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener  {
         MapPolygonImpl germany = new MapPolygonImpl("Germany", c(54.83,9.445), c(54.76,9.972), c(54.56,10.03), c(54.46,9.866), c(54.38,10.98), c(54.21,11.09), c(54.06,10.76), c(53.89,10.82), c(54.01,11.09), c(53.92,11.41), c(54.47,12.53), c(54.43,12.92), c(54.40,12.46), c(54.26,12.37), c(54.40,13.02), c(54.10,13.45), c(54.17,13.71), c(53.85,13.81), c(53.70,14.28), c(53.14,14.39), c(52.86,14.15), c(52.57,14.64), c(52.40,14.53), c(52.07,14.76), c(51.82,14.60), c(51.29,15.03), c(50.87,14.83), c(51.05,14.31), c(50.88,14.31), c(50.42,12.99), c(50.39,12.52), c(50.21,12.32), c(50.32,12.09), c(49.91,12.55), c(49.70,12.46), c(49.42,12.67), c(48.77,13.83), c(48.52,13.73), c(48.56,13.44), c(48.37,13.40), c(48.12,12.76), c(47.85,13.01), c(47.72,12.91), c(47.64,13.10), c(47.47,13.01), c(47.68,12.74), c(47.40,11.10), c(47.59,10.48), c(47.27,10.17), c(47.37,10.23), c(47.54,9.955), c(47.54,9.567), c(47.81,8.563), c(47.70,8.407), c(47.59,8.576), c(47.58,7.588), c(48.12,7.578), c(48.58,7.802), c(48.96,8.226), c(49.18,7.426), c(49.17,6.729), c(49.46,6.362), c(49.81,6.524), c(49.90,6.234), c(50.13,6.134), c(50.32,6.398), c(50.62,6.270), c(50.76,6.012), c(50.91,6.081), c(51.05,5.865), c(51.13,6.097), c(51.47,6.222), c(51.81,5.964), c(51.98,6.829), c(52.08,6.736), c(52.24,7.053), c(52.39,7.063), c(52.55,6.690), c(52.65,7.053), c(53.24,7.208), c(53.32,7.337), c(53.41,7.015), c(53.69,7.296), c(53.71,8.014), c(53.44,8.098), c(53.42,8.286), c(53.62,8.332), c(53.56,8.492), c(53.69,8.484), c(53.89,8.659), c(53.87,9.096), c(53.86,9.283), c(53.54,9.829), c(53.88,9.276), c(53.96,8.883), c(54.08,9.017), c(54.15,8.827), c(54.29,8.884), c(54.33,8.600), c(54.50,9.011), c(54.87,8.546), c(54.77,8.281), c(55.06,8.408), c(54.92,8.420), c(54.91,8.665), c(54.83,9.445));
         countryList.add(germany);
         
+
+        
         String[] emotionList = new String[]{"Blank", "Display Anger", "Display Sadness", "Diaplay Fear", "Display Happiness"};
         final JComboBox showEmotions = new JComboBox(emotionList);
         showEmotions.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                	if (showEmotions.getSelectedItem().equals("Blank"))
             	{	
-            		for(int i = 0; i < countryList.size(); i++){
-            			map().removeMapPolygon(countryList.get(i));
-            		}
+               		clearScreen();
             	}
             	if (showEmotions.getSelectedItem().equals("Display Anger"))
             	{	
-            		for(int i = 0; i < countryList.size(); i++){
-            			map().removeMapPolygon(countryList.get(i));
-            		}
-            		for(int i = 0; i < countryList.size(); i++){
-            			float j = data.getRegionalIndex(Region.getRegionIndex(countryList.get(i).getName()), Emotion.ANGRY);
-            			System.out.println(j);
-            			countryList.get(i).setBackColor(new Color(255, 0, 0, (int)(j * 100 + 1)));
-            		}
-
-            		for(int i = 0; i < countryList.size(); i++){
-            			map().addMapPolygon(countryList.get(i));
-            		}
+            		clearScreen();
+            		emotionScreen(Emotion.ANGRY, 255, 0, 0);
             	}
             	if (showEmotions.getSelectedItem().equals("Display Sadness"))
             	{
-            		for(int i = 0; i < countryList.size(); i++){
-            			map().removeMapPolygon(countryList.get(i));
-            		}
-            		for(int i = 0; i < countryList.size(); i++){
-            			float j = data.getRegionalIndex(Region.getRegionIndex(countryList.get(i).getName()), Emotion.SAD);
-            			System.out.println(j);
-            			countryList.get(i).setBackColor(new Color(0, 0, 255, (int)(j * 100 + 1)));
-            		}
-
-            		for(int i = 0; i < countryList.size(); i++){
-            			map().addMapPolygon(countryList.get(i));
-            		}
+            		clearScreen();
+            		emotionScreen(Emotion.SAD, 0, 0, 255);
             	}
             	if (showEmotions.getSelectedItem().equals("Display Fear"))
             	{
-            		for(int i = 0; i < countryList.size(); i++){
-            			map().removeMapPolygon(countryList.get(i));
-            		}
-            		for(int i = 0; i < countryList.size(); i++){
-            			float j = data.getRegionalIndex(Region.getRegionIndex(countryList.get(i).getName()), Emotion.FEAR);
-            			System.out.println(j);
-            			countryList.get(i).setBackColor(new Color(0, 255, 0, (int)(j * 100 + 1)));
-            		}
-
-            		for(int i = 0; i < countryList.size(); i++){
-            			map().addMapPolygon(countryList.get(i));
-            		}
+            		clearScreen();
+            		emotionScreen(Emotion.FEAR, 0, 255, 0);
             	}
             	if (showEmotions.getSelectedItem().equals("Display Happiness"))
             	{
-            		for(int i = 0; i < countryList.size(); i++){
-            			map().removeMapPolygon(countryList.get(i));
-            		}
-            		for(int i = 0; i < countryList.size(); i++){
-            			float j = data.getRegionalIndex(Region.getRegionIndex(countryList.get(i).getName()), Emotion.HAPPY);
-            			System.out.println(j);
-            			countryList.get(i).setBackColor(new Color(255, 255, 0, (int)(j * 100 + 1)));
-            		}
-
-            		for(int i = 0; i < countryList.size(); i++){
-            			map().addMapPolygon(countryList.get(i));
-            		}
+            		clearScreen();
+            		emotionScreen(Emotion.HAPPY, 255, 255, 0);
             	}
             }
         });
@@ -358,6 +322,28 @@ public class MiseryMap extends JFrame implements JMapViewerEventListener  {
             }
         });
     }
+    
+    public void clearScreen()
+    {
+    	currentEmotion = 4;
+		for(int i = 0; i < countryList.size(); i++){
+			map().removeMapPolygon(countryList.get(i));
+		}
+    }
+    public void emotionScreen(int currentEmotion, int r, int g, int b)
+    {
+    	this.currentEmotion = currentEmotion;
+		for(int i = 0; i < countryList.size(); i++){
+			float j = data.getRegionalIndex(Region.getRegionIndex(countryList.get(i).getName()), currentEmotion);
+			System.out.println(j);
+			countryList.get(i).setBackColor(new Color(r, g, b, (int)(j * 100 + 1)));
+		}
+
+		for(int i = 0; i < countryList.size(); i++){
+			map().addMapPolygon(countryList.get(i));
+		}
+    }
+    
     private JMapViewer map(){
         return treeMap.getViewer();
     }
